@@ -10,7 +10,7 @@ Current State of Website:
     -all four pages just have placeholder text currently
     -website is currently very responsive for desktop use -> unsure about mobile
 
-<img src="hopfe-farm-readme-pics/hopfe_farm1.PNG" width="100" height="auto" />
+<img src="./readmePics/hopfeFarm1.PNG" width='25%' height="auto" />
 
 Future Plans for Website:
     -Populate pages with appropriate displays and pictures.
