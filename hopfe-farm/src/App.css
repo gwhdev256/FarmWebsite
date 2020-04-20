@@ -5,14 +5,15 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  min-height: 100vh;
 }
 
 .App-header {
   /* background: rgb(58,71,180);
   background: linear-gradient(56deg, rgba(58,71,180,1) 0%, rgba(253,29,29,0.7763480392156863) 14%, rgba(252,176,69,1) 100%); */
   background: #f5f5f531;
-  min-height: 20vh;
-  max-height: 20vh;
+  /* min-height: 20vh;
+  max-height: 20vh; */
   height: auto;
 }
 
@@ -74,8 +75,8 @@
 }
 
 .Component-display {
-  min-height: 80vh;
   height: 100%;
+  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -98,13 +99,16 @@
   font-size: calc(5px + 2vmin);
   color: rgba(255, 255, 255, 0.623);
   height: 100%;
-  padding: 0vh 0vh 40vh 0vh;
+  padding: 0vh 0vh 5vh 0vh;
 }
+
+/* color: rgba(4, 255, 213, 0.63); */
 
 .hay-app-header {
   margin-bottom: 0vh;
-  color: rgba(4, 255, 213, 0.63);
+  color: rgba(85, 193, 255, 0.788);
   font-size: calc(5px + 6vmin);
+  text-shadow: 2px 2px black;
 }
 
 .hay-description {
@@ -116,11 +120,17 @@
   font-size: calc(5px + 3vmin);
 }
 
-.tr:nth-child(odd){
-  background-color: #f5f5f518;
-}
-
-.tr:hover {
-  background: rgba(221, 221, 221, 0.274);
-  font-size: calc(5px + 2.2vmin);
+@media only screen and (min-width: 640px) {
+  .tr {
+    height: calc(20px + 2.2vmin);
+  }
+  
+  .tr:nth-child(odd){
+    background-color: #f5f5f518;
+  }
+  
+  .tr:hover {
+    background: rgba(221, 221, 221, 0.274);
+    font-size: calc(5px + 2.2vmin);
+  }
 }

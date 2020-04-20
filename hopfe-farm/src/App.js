@@ -17,13 +17,6 @@ const App = () => {
     setSelectedIcon(event.target.name);
   }
 
-  const navIcons = () => {
-    return [<img key={1} name={home} src={home} tabIndex={0} className={(selectedIcon === home) ? `Selected home` : `Unselected home`} onClick={(event) => selectedElement(event)} />,
-    <img key={2} name={hay} src={hay} tabIndex={0} className={(selectedIcon === hay) ? `Selected hay` : `Unselected hay`} onClick={(event) => selectedElement(event)} />,
-    <img key={3} name={honey} src={honey} tabIndex={0} className={(selectedIcon === honey) ? `Selected honey` : `Unselected honey`} onClick={(event) => selectedElement(event)} />,
-    <img key={4} name={contact} src={contact} tabIndex={0} className={(selectedIcon === contact) ? `Selected contact` : `Unselected contact`} onClick={(event) => selectedElement(event)} />]
-  }
-
   const pageDisplayed = () => {
     if (selectedIcon === home) {
       return < Home />;
@@ -44,19 +37,19 @@ const App = () => {
         </div>
         <div className="Nav-bar">
           <div className="Home-nav">
-            {<img key={1} name={home} src={home} tabIndex={0} className={(selectedIcon === home) ? `Selected home` : `Unselected home`} onClick={(event) => selectedElement(event)} />}
+            {<img key={1} name={home} alt="homepage" src={home} tabIndex={0} className={(selectedIcon === home) ? `Selected home` : `Unselected home`} onClick={(event) => selectedElement(event)} />}
             <span className="Tooltip home-tip">Home Page</span>
           </div>
           <div className="Hay-nav">
-            <img key={2} name={hay} src={hay} tabIndex={0} className={(selectedIcon === hay) ? `Selected hay` : `Unselected hay`} onClick={(event) => selectedElement(event)} />
+            <img key={2} name={hay} alt="haypage" src={hay} tabIndex={0} className={(selectedIcon === hay) ? `Selected hay` : `Unselected hay`} onClick={(event) => selectedElement(event)} />
             <span className="Tooltip hay-tip">Hay</span>
           </div>
           <div className="Honey-nav">
-            <img key={3} name={honey} src={honey} tabIndex={0} className={(selectedIcon === honey) ? `Selected honey` : `Unselected honey`} onClick={(event) => selectedElement(event)} />
+            <img key={3} name={honey} alt="honeypage" src={honey} tabIndex={0} className={(selectedIcon === honey) ? `Selected honey` : `Unselected honey`} onClick={(event) => selectedElement(event)} />
             <span className="Tooltip honey-tip">Honey</span>
           </div>
           <div className="Contact-nav">
-            <img key={4} name={contact} src={contact} tabIndex={0} className={(selectedIcon === contact) ? `Selected contact` : `Unselected contact`} onClick={(event) => selectedElement(event)} />
+            <img key={4} name={contact} alt="contactpage" src={contact} tabIndex={0} className={(selectedIcon === contact) ? `Selected contact` : `Unselected contact`} onClick={(event) => selectedElement(event)} />
             <span className="Tooltip contact-tip">Contact Us</span>
           </div>
         </div>
