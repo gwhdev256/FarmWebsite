@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import App from '../App.js';
 
+import home from '../images/home.svg';
+import hay from '../images/hay.svg';
+import honey from '../images/honey.svg';
+import contact from '../images/contact.svg';
+
 export const AppContext = React.createContext();
 
 export const ContextProvider = () => {
+    const [selectedIcon, setSelectedIcon] = useState("admin");
     const [hayHeader, setHayHeader] = useState(["Hay Type", "Bale Quality", "Quantity", "Price/Bale"]);
     const [hayTr1, setHayTr1] = useState(["5% Alfalfa", "No Rain", (5).toFixed(0), "$ "+(125.00).toFixed(2)]);
     const [hayTr2, setHayTr2] = useState(["30% Alfalfa", "No Rain", (39).toFixed(0), "$ "+(120.00).toFixed(2)]);
@@ -15,6 +21,17 @@ export const ContextProvider = () => {
     const [honeyHeader, setHoneyHeader] = useState(["Honey Type", "Honey Size", "Quantity", "Price/Unit"]);
     const [honeyTr1, setHoneyTr1] = useState(["Wildflower/Alfalfa", "340ml(12oz)", (6).toFixed(0), "$ "+(10.00).toFixed(2)]);
     const [honeyTr2, setHoneyTr2] = useState(["Wildflower/Alfalfa", "500ml(17.6oz)", (0).toFixed(0), "$ "+(15.00).toFixed(2)]);
+
+    const selectedElement = (event) => {
+        setSelectedIcon(event.target.name);
+    }
+
+    const handleOnChange = (event) => {
+        let currentArray = eval(event.target.alt);
+        let id = Number(event.target.id);
+        currentArray[id] = event.target.value;
+        eval(event.target.name)(currentArray);
+    }
 
     return (
         <AppContext.Provider
@@ -39,6 +56,10 @@ export const ContextProvider = () => {
             setHoneyTr1: setHoneyTr1,
             honeyTr2: honeyTr2,
             setHoneyTr2: setHoneyTr2,
+            selectedIcon: selectedIcon,
+            setSelectedIcon: setSelectedIcon,
+            selectedElement: selectedElement,
+            handleOnChange: handleOnChange,
         }}>
             <App />
         </AppContext.Provider>

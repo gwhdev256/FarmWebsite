@@ -151,6 +151,13 @@
   font-size: calc(5px + 3vmin);
 }
 
+.admin-hay-header,
+.admin-honey-header {
+  font-size: calc(5px + 3vmin);
+  color: rgba(245, 245, 245, 0.849);
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.664);
+}
+
 @media only screen and (min-width: 640px) {
   .tr,
   .honey-tr {
