@@ -9,7 +9,7 @@ import contact from '../images/contact.svg';
 export const AppContext = React.createContext();
 
 export const ContextProvider = () => {
-    const [selectedIcon, setSelectedIcon] = useState("admin");
+    const [selectedIcon, setSelectedIcon] = useState(home);
     const [hayHeader, setHayHeader] = useState(["Hay Type", "Bale Quality", "Quantity", "Price/Bale"]);
     const [hayTr1, setHayTr1] = useState(["5% Alfalfa", "No Rain", (5).toFixed(0), "$ "+(125.00).toFixed(2)]);
     const [hayTr2, setHayTr2] = useState(["30% Alfalfa", "No Rain", (39).toFixed(0), "$ "+(120.00).toFixed(2)]);
@@ -33,6 +33,10 @@ export const ContextProvider = () => {
         eval(event.target.name)(currentArray);
     }
 
+    const setIcon = (icon) => {
+        setSelectedIcon(icon);
+    }
+    
     return (
         <AppContext.Provider
         value={{
@@ -60,6 +64,7 @@ export const ContextProvider = () => {
             setSelectedIcon: setSelectedIcon,
             selectedElement: selectedElement,
             handleOnChange: handleOnChange,
+            setIcon: setIcon,
         }}>
             <App />
         </AppContext.Provider>
