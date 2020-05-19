@@ -6,8 +6,21 @@ import { AppContext } from './AppContext.js';
 
 const Hay = () => {
     const appContext = React.useContext(AppContext);
+    const hayTrArr = [appContext.hayTr1, appContext.hayTr2, appContext.hayTr3, appContext.hayTr4, appContext.hayTr5, appContext.hayTr6];
+
+    const createTr = hayTrArr.map((tr) => {
+        return (
+            <Tr className="tr">
+                <Td>{tr[0]}</Td>
+                <Td>{tr[1]}</Td>
+                <Td>{tr[2]}</Td>
+                <Td>{tr[3]}</Td>
+            </Tr>
+        )
+    })
+
     return (
-        <body className="hay-app">
+        <div className="hay-app">
             <h1 className="hay-app-header">Hay For Sale</h1>
             <h2 className="hay-description">All Hay is a Mix of Alfalfa, Brohm, Timothy and Orchard Grass available in 1400 lb Round Bales</h2>
             <span className="hay-contact">Please contact Garth Hopfe for hay orders.</span>
@@ -22,45 +35,10 @@ const Hay = () => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    <Tr className="tr">
-                        <Td>{appContext.hayTr1[0]}</Td>
-                        <Td>{appContext.hayTr1[1]}</Td>
-                        <Td>{appContext.hayTr1[2]}</Td>
-                        <Td>{appContext.hayTr1[3]}</Td>
-                    </Tr>
-                    <Tr className="tr">
-                        <Td>{appContext.hayTr2[0]}</Td>
-                        <Td>{appContext.hayTr2[1]}</Td>
-                        <Td>{appContext.hayTr2[2]}</Td>
-                        <Td>{appContext.hayTr2[3]}</Td>
-                    </Tr>
-                    <Tr className="tr">
-                        <Td>{appContext.hayTr3[0]}</Td>
-                        <Td>{appContext.hayTr3[1]}</Td>
-                        <Td>{appContext.hayTr3[2]}</Td>
-                        <Td>{appContext.hayTr3[3]}</Td>
-                    </Tr>
-                    <Tr className="tr">
-                        <Td>{appContext.hayTr4[0]}</Td>
-                        <Td>{appContext.hayTr4[1]}</Td>
-                        <Td>{appContext.hayTr4[2]}</Td>
-                        <Td>{appContext.hayTr4[3]}</Td>
-                    </Tr>
-                    <Tr className="tr">
-                        <Td>{appContext.hayTr5[0]}</Td>
-                        <Td>{appContext.hayTr5[1]}</Td>
-                        <Td>{appContext.hayTr5[2]}</Td>
-                        <Td>{appContext.hayTr5[3]}</Td>
-                    </Tr>
-                    <Tr className="tr">
-                        <Td>{appContext.hayTr6[0]}</Td>
-                        <Td>{appContext.hayTr6[1]}</Td>
-                        <Td>{appContext.hayTr6[2]}</Td>
-                        <Td>{appContext.hayTr6[3]}</Td>
-                    </Tr>
+                    {createTr}
                 </Tbody>
             </Table>
-        </body>
+        </div>
     )
 }
 

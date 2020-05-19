@@ -6,6 +6,20 @@ import { AppContext } from './AppContext.js';
 
 const Honey = () => {
     const appContext = React.useContext(AppContext);
+
+    const honeyTrArr = [appContext.honeyTr1, appContext.honeyTr2];
+
+    const createTr = honeyTrArr.map((tr) => {
+        return (
+            <Tr className="tr">
+                <Td className="honey-type-td">{tr[0]}</Td>
+                <Td className="honey-td">{tr[1]}</Td>
+                <Td className="honey-td">{tr[2]}</Td>
+                <Td className="honey-td">{tr[3]}</Td>
+            </Tr>
+        )
+    })
+
     return (
         <body className="honey-app">
             <h1 className="honey-app-header">Honey For Sale</h1>
@@ -20,18 +34,7 @@ const Honey = () => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    <Tr className="honey-tr">
-                        <Td className="honey-type-td">{appContext.honeyTr1[0]}</Td>
-                        <Td className="honey-td">{appContext.honeyTr1[1]}</Td>
-                        <Td className="honey-td">{appContext.honeyTr1[2]}</Td>
-                        <Td className="honey-td">{appContext.honeyTr1[3]}</Td>
-                    </Tr>
-                    <Tr className="honey-tr">
-                        <Td className="honey-type-td">{appContext.honeyTr2[0]}</Td>
-                        <Td className="honey-td">{appContext.honeyTr2[1]}</Td>
-                        <Td className="honey-td">{appContext.honeyTr2[2]}</Td>
-                        <Td className="honey-td">{appContext.honeyTr2[3]}</Td>
-                    </Tr>
+                    {createTr}
                 </Tbody>
             </Table>
         </body>
