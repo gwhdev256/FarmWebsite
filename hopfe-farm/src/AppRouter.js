@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import Home from './components/Home.js';
 import Hay from './components/Hay.js';
 import Honey from './components/Honey.js';
 import Contact from './components/Contact.js';
-import Admin from './components/Admin.js';
 import { AppContext } from './components/AppContext.js';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+// import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import home from './images/home.svg';
 import hay from './images/hay.svg';

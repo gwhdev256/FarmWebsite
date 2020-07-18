@@ -8,7 +8,7 @@ import contact from '../images/contact.svg';
 
 export const AppContext = React.createContext();
 
-export const ContextProvider = () => {
+export const ContextProvider = (props) => {
     const [selectedIcon, setSelectedIcon] = useState(home);
     const [hayHeader, setHayHeader] = useState(["Hay Type", "Bale Quality", "Quantity", "Price/Bale"]);
     const [hayTr1, setHayTr1] = useState(["5% Alfalfa", "No Rain", (5).toFixed(0), "$ "+(125.00).toFixed(2)]);
@@ -66,7 +66,7 @@ export const ContextProvider = () => {
             handleOnChange: handleOnChange,
             setIcon: setIcon,
         }}>
-            <App />
+            {props.children}
         </AppContext.Provider>
     )
 };
