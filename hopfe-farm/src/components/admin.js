@@ -17,7 +17,7 @@ import admin from '../images/padlock.svg';
 const Admin = () => {
     const appContext = React.useContext(AppContext);
 
-    React.useEffect(() => appContext.setIcon("login"), []);
+    useEffect(() => appContext.setIcon("login"), []);
 
     const adminPageDisplayed = () => {
         if (appContext.selectedIcon === home) {
@@ -82,9 +82,9 @@ const Admin = () => {
     );
 
     const navSelector = () => {
-        if (appContext.selectedIcon === "login") {
+        if (appContext.loggedIn === false) {
             return <NavDefault />;
-        } else return <NavAdmin />;
+        } return <NavAdmin />;
     }
 
 

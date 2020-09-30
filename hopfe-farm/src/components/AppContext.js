@@ -10,6 +10,9 @@ export const AppContext = React.createContext();
 
 export const ContextProvider = (props) => {
     const [selectedIcon, setSelectedIcon] = useState(home);
+    const [url, setUrl] = useState("http://localhost:5000");
+    const [loggedIn, setLoggedIn] = useState(false);
+    
     const [hayHeader, setHayHeader] = useState(["Hay Type", "Bale Quality", "Quantity", "Price/Bale"]);
     const [hayTr1, setHayTr1] = useState(["5% Alfalfa", "No Rain", (5).toFixed(0), "$ "+(125.00).toFixed(2)]);
     const [hayTr2, setHayTr2] = useState(["30% Alfalfa", "No Rain", (39).toFixed(0), "$ "+(120.00).toFixed(2)]);
@@ -40,31 +43,35 @@ export const ContextProvider = (props) => {
     return (
         <AppContext.Provider
         value={{
-            hayHeader: hayHeader,
-            setHayHeader: setHayHeader,
-            hayTr1: hayTr1,
-            setHayTr1: setHayTr1,
-            hayTr2: hayTr2,
-            setHayTr2: setHayTr2,
-            hayTr3: hayTr3,
-            setHayTr3: setHayTr3,
-            hayTr4: hayTr4,
-            setHayTr4: setHayTr4,
-            hayTr5: hayTr5,
-            setHayTr5: setHayTr5,
-            hayTr6: hayTr6,
-            setHayTr6: setHayTr6,
-            honeyHeader: honeyHeader,
-            setHoneyHeader: setHoneyHeader,
-            honeyTr1: honeyTr1,
-            setHoneyTr1: setHoneyTr1,
-            honeyTr2: honeyTr2,
-            setHoneyTr2: setHoneyTr2,
-            selectedIcon: selectedIcon,
-            setSelectedIcon: setSelectedIcon,
-            selectedElement: selectedElement,
-            handleOnChange: handleOnChange,
-            setIcon: setIcon,
+            hayHeader,
+            setHayHeader,
+            hayTr1,
+            setHayTr1,
+            hayTr2,
+            setHayTr2,
+            hayTr3,
+            setHayTr3,
+            hayTr4,
+            setHayTr4,
+            hayTr5,
+            setHayTr5,
+            hayTr6,
+            setHayTr6,
+            honeyHeader,
+            setHoneyHeader,
+            honeyTr1,
+            setHoneyTr1,
+            honeyTr2,
+            setHoneyTr2,
+            selectedIcon,
+            setSelectedIcon,
+            selectedElement,
+            handleOnChange,
+            setIcon,
+            url,
+            setUrl,
+            loggedIn,
+            setLoggedIn
         }}>
             {props.children}
         </AppContext.Provider>
