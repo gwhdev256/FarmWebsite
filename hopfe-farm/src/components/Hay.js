@@ -9,13 +9,22 @@ const Hay = () => {
     const hayTrArr = [appContext.hayTr1, appContext.hayTr2, appContext.hayTr3, appContext.hayTr4, appContext.hayTr5, appContext.hayTr6];
 
     const createTr = hayTrArr.map((tr) => {
-        return (
-            <Tr className="tr">
-                <Td>{tr[0]}</Td>
-                <Td>{tr[1]}</Td>
-                <Td>{tr[2]}</Td>
-                <Td>{tr[3]}</Td>
-            </Tr>
+        if (tr[2] > 0) {
+            return (
+                <Tr className="tr">
+                    <Td>{tr[0]}</Td>
+                    <Td>{tr[1]}</Td>
+                    <Td>Available</Td>
+                    <Td>{tr[3]}</Td>
+                </Tr>
+            )
+        } return (
+                <Tr className="tr">
+                    <Td>{tr[0]}</Td>
+                    <Td>{tr[1]}</Td>
+                    <Td>Sold Out</Td>
+                    <Td>{tr[3]}</Td>
+                </Tr>
         )
     })
 
