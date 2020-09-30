@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 from db import db
 
 from resources.users import UserRegister, User, UserLogin
@@ -13,6 +14,7 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 app.secret_key = 'development'
 
 api = Api(app)
+CORS(app)
 
 @app.before_first_request
 def create_tables():
