@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import '../App.css';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
@@ -8,22 +8,26 @@ const Hay = () => {
     const appContext = React.useContext(AppContext);
     const hayTrArr = [appContext.hayTr1, appContext.hayTr2, appContext.hayTr3, appContext.hayTr4, appContext.hayTr5, appContext.hayTr6];
 
+    useEffect(() => {
+        appContext.setSelectedIcon("hay");
+    });
+
     const createTr = hayTrArr.map((tr) => {
         if (tr[2] > 0) {
             return (
-                <Tr className="tr">
-                    <Td>{tr[0]}</Td>
-                    <Td>{tr[1]}</Td>
-                    <Td>Available</Td>
-                    <Td>{tr[3]}</Td>
+                <Tr key={`${tr[0]}_${tr[1]}`} className="tr">
+                    <Td key={`${tr[0]}_${tr[1]}`+1}>{tr[0]}</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+2}>{tr[1]}</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+3}>Available</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+4}>{tr[3]}</Td>
                 </Tr>
             )
         } return (
-                <Tr className="tr">
-                    <Td>{tr[0]}</Td>
-                    <Td>{tr[1]}</Td>
-                    <Td>Sold Out</Td>
-                    <Td>{tr[3]}</Td>
+                <Tr key={`${tr[0]}_${tr[1]}`} className="tr">
+                    <Td key={`${tr[0]}_${tr[1]}`+1}>{tr[0]}</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+2}>{tr[1]}</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+3}>Sold Out</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+4}>{tr[3]}</Td>
                 </Tr>
         )
     })

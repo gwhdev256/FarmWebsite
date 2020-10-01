@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import '../App.css';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
@@ -6,31 +6,34 @@ import { AppContext } from './AppContext.js';
 
 const Honey = () => {
     const appContext = React.useContext(AppContext);
-
     const honeyTrArr = [appContext.honeyTr1, appContext.honeyTr2];
+
+    useEffect(() => {
+        appContext.setSelectedIcon("honey");
+    });
 
     const createTr = honeyTrArr.map((tr) => {
         if (tr[2] > 0) {
             return (
-                <Tr className="tr">
-                    <Td className="honey-type-td">{tr[0]}</Td>
-                    <Td className="honey-td">{tr[1]}</Td>
-                    <Td className="honey-td">Available</Td>
-                    <Td className="honey-td">{tr[3]}</Td>
+                <Tr key={`${tr[0]}_${tr[1]}`} className="tr">
+                    <Td key={`${tr[0]}_${tr[1]}`+1} className="honey-type-td">{tr[0]}</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+2} className="honey-td">{tr[1]}</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+3} className="honey-td">Available</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+4} className="honey-td">{tr[3]}</Td>
                 </Tr>
             )
         } return (
-                <Tr className="tr">
-                    <Td className="honey-type-td">{tr[0]}</Td>
-                    <Td className="honey-td">{tr[1]}</Td>
-                    <Td className="honey-td">Sold Out</Td>
-                    <Td className="honey-td">{tr[3]}</Td>
+                <Tr key={`${tr[0]}_${tr[1]}`} className="tr">
+                    <Td key={`${tr[0]}_${tr[1]}`+1} className="honey-type-td">{tr[0]}</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+2} className="honey-td">{tr[1]}</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+3} className="honey-td">Sold Out</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+4} className="honey-td">{tr[3]}</Td>
                 </Tr>
         )
     })
 
     return (
-        <body className="honey-app">
+        <div className="honey-app">
             <h1 className="honey-app-header">Honey For Sale</h1>
             <span className="honey-contact">Please contact Garth Hopfe for honey orders.</span>
             <Table>
@@ -46,7 +49,7 @@ const Honey = () => {
                     {createTr}
                 </Tbody>
             </Table>
-        </body>
+        </div>
     )
 }
 
