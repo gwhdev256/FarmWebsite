@@ -29,7 +29,7 @@ export const useFetchWithAuth = (url = '', urlMethod = 'GET', token = '') => {
             setLoading(false);
         }
         fetchData();
-    }, []);
+    });
 
     return { data, loading };
 };
