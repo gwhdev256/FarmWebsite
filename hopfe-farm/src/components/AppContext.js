@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 
-import home from '../images/home.svg';
-import hay from '../images/hay.svg';
-import honey from '../images/honey.svg';
-import contact from '../images/contact.svg';
-
 export const AppContext = React.createContext();
 
 export const ContextProvider = (props) => {
-    const [selectedIcon, setSelectedIcon] = useState(home);
+    const [selectedIcon, setSelectedIcon] = useState("home");
     const [apiUrl, setApiUrl] = useState("http://localhost:5000");
     const [homeUrl, setHomeUrl] = useState("http://localhost:3000/");
     const [loggedIn, setLoggedIn] = useState(false);
@@ -36,9 +31,6 @@ export const ContextProvider = (props) => {
         eval(event.target.name)(currentArray);
     }
 
-    const setIcon = (icon) => {
-        setSelectedIcon(icon);
-    }
     
     return (
         <AppContext.Provider
@@ -67,7 +59,6 @@ export const ContextProvider = (props) => {
             setSelectedIcon,
             selectedElement,
             handleOnChange,
-            setIcon,
             apiUrl,
             setApiUrl,
             homeUrl,
