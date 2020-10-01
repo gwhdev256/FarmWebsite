@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import App from '../App.js';
 
 import home from '../images/home.svg';
 import hay from '../images/hay.svg';
@@ -10,7 +9,8 @@ export const AppContext = React.createContext();
 
 export const ContextProvider = (props) => {
     const [selectedIcon, setSelectedIcon] = useState(home);
-    const [url, setUrl] = useState("http://localhost:5000");
+    const [apiUrl, setApiUrl] = useState("http://localhost:5000");
+    const [homeUrl, setHomeUrl] = useState("http://localhost:3000/");
     const [loggedIn, setLoggedIn] = useState(false);
     
     const [hayHeader, setHayHeader] = useState(["Hay Type", "Bale Quality", "Quantity", "Price/Bale"]);
@@ -31,8 +31,8 @@ export const ContextProvider = (props) => {
 
     const handleOnChange = (event) => {
         let currentArray = eval(event.target.alt);
-        let id = Number(event.target.id);
-        currentArray[id] = event.target.value;
+        let currArrIndex = Number(event.target.className);
+        currentArray[currArrIndex] = event.target.value;
         eval(event.target.name)(currentArray);
     }
 
@@ -68,8 +68,10 @@ export const ContextProvider = (props) => {
             selectedElement,
             handleOnChange,
             setIcon,
-            url,
-            setUrl,
+            apiUrl,
+            setApiUrl,
+            homeUrl,
+            setHomeUrl,
             loggedIn,
             setLoggedIn
         }}>

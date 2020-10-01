@@ -13,7 +13,7 @@ const AdminLogin = () => {
     const [errorMessage, setErrorMessage] = useState(null);
 
     const handleSubmit = async(name) => {
-        let res = await fetchFunc(`${appContext.url}/login`, 'POST', {"username": `${username}`, "password": `${password}`})
+        let res = await fetchFunc(`${appContext.apiUrl}/login`, 'POST', {"username": `${username}`, "password": `${password}`})
         console.log(res)
         if (res['access_token']) {
             appContext.setLoggedIn(true);
@@ -24,6 +24,10 @@ const AdminLogin = () => {
         }
     };
 
+    const handleGoBack = () => {
+        return window.location.replace(`${appContext.homeUrl}`)
+    }
+
     return (
         <div>
             <label>Username:</label>
@@ -32,6 +36,7 @@ const AdminLogin = () => {
             <input value={password} type="password" onChange={e => setPassword(e.target.value)}></input>
             <button className="admin-login-button" name={admin} onClick={(event) => handleSubmit(event.name)}>Login</button>
             <div className="login-error-message">{errorMessage}</div>
+            <button onClick={handleGoBack}>Go Back</button>
         </div>
     )
 };

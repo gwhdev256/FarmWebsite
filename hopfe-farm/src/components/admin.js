@@ -18,9 +18,11 @@ const Admin = () => {
     const appContext = React.useContext(AppContext);
 
     useEffect(() => appContext.setIcon("login"), []);
-
+    
     const adminPageDisplayed = () => {
-        if (appContext.selectedIcon === home) {
+        if (appContext.selectedIcon === "login") {
+            return < AdminLogin />;
+        } if (appContext.selectedIcon === home) {
             return < Home />;
         } if (appContext.selectedIcon === hay) {
             return < Hay />;
@@ -30,31 +32,8 @@ const Admin = () => {
             return < Contact />;
         } if (appContext.selectedIcon === admin) {
             return < AdminApp />;
-        } if (appContext.selectedIcon === "login") {
-            return < AdminLogin />;
-        } else return < AdminLogin />;
+        } return null
     }
-
-    const NavDefault = () => (
-        <div className="Nav-bar">
-            <div className="Home-nav">
-                {<img key={1} name={home} alt="homepage" src={home} tabIndex={0} className={(appContext.selectedIcon === home) ? `Selected home` : `Unselected home`} onClick={(event) => appContext.selectedElement(event)} />}
-                <span className="Tooltip home-tip">Home Page</span>
-            </div>
-            <div className="Hay-nav">
-                <img key={2} name={hay} alt="haypage" src={hay} tabIndex={0} className={(appContext.selectedIcon === hay) ? `Selected hay` : `Unselected hay`} onClick={(event) => appContext.selectedElement(event)} />
-                <span className="Tooltip hay-tip">Hay</span>
-            </div>
-            <div className="Honey-nav">
-                <img key={3} name={honey} alt="honeypage" src={honey} tabIndex={0} className={(appContext.selectedIcon === honey) ? `Selected honey` : `Unselected honey`} onClick={(event) => appContext.selectedElement(event)} />
-                <span className="Tooltip honey-tip">Honey</span>
-            </div>
-            <div className="Contact-nav">
-                <img key={4} name={contact} alt="contactpage" src={contact} tabIndex={0} className={(appContext.selectedIcon === contact) ? `Selected contact` : `Unselected contact`} onClick={(event) => appContext.selectedElement(event)} />
-                <span className="Tooltip contact-tip">Contact Us</span>
-            </div>
-        </div>
-    );
 
     const NavAdmin = () => (
         <div className="Nav-bar">
@@ -83,10 +62,9 @@ const Admin = () => {
 
     const navSelector = () => {
         if (appContext.loggedIn === false) {
-            return <NavDefault />;
-        } return <NavAdmin />;
-    }
-
+            return null
+        } return <NavAdmin />
+    };
 
 
     return (

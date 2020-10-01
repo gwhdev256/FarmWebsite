@@ -17,14 +17,15 @@ const AdminApp = () => {
     
     const createHayTr = hayTrArr.map((tr, i) => {
         const trIndex = i + 1;
+        let counter = trIndex * 10;
         const trName = `setHayTr${trIndex}`;
         const trAlt = `hayTr${trIndex}`;
         return (
             <Tr className="tr">
-                <Td><input value={tr[0]} name={trName} alt={trAlt} id="0" onChange={(event) => changeHandler(event)}></input></Td>
-                <Td><input value={tr[1]} name={trName} alt={trAlt} id="1" onChange={(event) => changeHandler(event)}></input></Td>
-                <Td><input value={tr[2]} name={trName} alt={trAlt} id="2" onChange={(event) => changeHandler(event)}></input></Td>
-                <Td><input value={tr[3]} name={trName} alt={trAlt} id="3" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td><input value={tr[0]} name={trName} alt={trAlt} key={counter} className="0" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td><input value={tr[1]} name={trName} alt={trAlt} key={counter + 1} className="1" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td><input value={tr[2]} name={trName} alt={trAlt} key={counter + 2} className="2" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td><input value={tr[3]} name={trName} alt={trAlt} key={counter + 3} className="3" onChange={(event) => changeHandler(event)}></input></Td>
             </Tr>
         )
     })
@@ -37,10 +38,10 @@ const AdminApp = () => {
         const trAlt = `honeyTr${trIndex}`;
         return (
             <Tr className="tr">
-                <Td className="honey-type-td"><input value={tr[0]} name={trName} alt={trAlt} id="0" onChange={(event) => changeHandler(event)}></input></Td>
-                <Td className="honey-td"><input value={tr[1]} name={trName} alt={trAlt} id="1" onChange={(event) => changeHandler(event)}></input></Td>
-                <Td className="honey-td"><input value={tr[2]} name={trName} alt={trAlt} id="2" onChange={(event) => changeHandler(event)}></input></Td>
-                <Td className="honey-td"><input value={tr[3]} name={trName} alt={trAlt} id="3" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td className="honey-type-td"><input value={tr[0]} name={trName} alt={trAlt} className="0" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr[1]} name={trName} alt={trAlt} className="1" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr[2]} name={trName} alt={trAlt} className="2" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr[3]} name={trName} alt={trAlt} className="3" onChange={(event) => changeHandler(event)}></input></Td>
             </Tr>
         ) 
     })
