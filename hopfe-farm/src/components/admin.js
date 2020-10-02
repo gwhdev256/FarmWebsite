@@ -1,85 +1,89 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import '../App.css';
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import { AppContext } from './AppContext.js';
-import AdminApp from './AdminApp.js';
-import AdminLogin from './AdminLogin.js';
-import Home from './Home.js';
-import Hay from './Hay.js';
-import Honey from './Honey.js';
-import Contact from './Contact.js';
 
-import home from '../images/home.svg';
-import hay from '../images/hay.svg';
-import honey from '../images/honey.svg';
-import contact from '../images/contact.svg';
-import admin from '../images/padlock.svg';
-
-const Admin = () => {
+const AdminApp = () => {
     const appContext = React.useContext(AppContext);
+    const [stateToggle, setStateToggle] = useState(0);
 
-    useEffect(() => appContext.setIcon("login"), []);
-    
-    const adminPageDisplayed = () => {
-        if (appContext.selectedIcon === "login") {
-            return < AdminLogin />;
-        } if (appContext.selectedIcon === home) {
-            return < Home />;
-        } if (appContext.selectedIcon === hay) {
-            return < Hay />;
-        } if (appContext.selectedIcon === honey) {
-            return < Honey />;
-        } if (appContext.selectedIcon === contact) {
-            return < Contact />;
-        } if (appContext.selectedIcon === admin) {
-            return < AdminApp />;
-        } return null
+    const changeHandler = (event) => {
+        appContext.handleOnChange(event);
+        setStateToggle(stateToggle + 1);
     }
 
-    const NavAdmin = () => (
-        <div className="Nav-bar">
-            <div className="Home-nav">
-                {<img key={1} name={home} alt="homepage" src={home} tabIndex={0} className={(appContext.selectedIcon === home) ? `Selected home` : `Unselected home`} onClick={(event) => appContext.selectedElement(event)} />}
-                <span className="Tooltip home-tip">Home Page</span>
-            </div>
-            <div className="Hay-nav">
-                <img key={2} name={hay} alt="haypage" src={hay} tabIndex={0} className={(appContext.selectedIcon === hay) ? `Selected hay` : `Unselected hay`} onClick={(event) => appContext.selectedElement(event)} />
-                <span className="Tooltip hay-tip">Hay</span>
-            </div>
-            <div className="Honey-nav">
-                <img key={3} name={honey} alt="honeypage" src={honey} tabIndex={0} className={(appContext.selectedIcon === honey) ? `Selected honey` : `Unselected honey`} onClick={(event) => appContext.selectedElement(event)} />
-                <span className="Tooltip honey-tip">Honey</span>
-            </div>
-            <div className="Contact-nav">
-                <img key={4} name={contact} alt="contactpage" src={contact} tabIndex={0} className={(appContext.selectedIcon === contact) ? `Selected contact` : `Unselected contact`} onClick={(event) => appContext.selectedElement(event)} />
-                <span className="Tooltip contact-tip">Contact Us</span>
-            </div>
-            <div className="Admin-nav">
-                <img key={4} name={admin} alt="contactpage" src={admin} tabIndex={0} className={(appContext.selectedIcon === contact) ? `Selected contact` : `Unselected contact`} onClick={(event) => appContext.selectedElement(event)} />
-                <span className="Tooltip admin-tip">Administrator</span>
-            </div>
-        </div>
-    );
+    // const handleOnChange = (event) => {
+    //     let currentArray = eval(event.target.alt);
+    //     let currArrIndex = Number(event.target.className);
+    //     currentArray[currArrIndex] = event.target.value;
+    //     eval(event.target.name)(currentArray);
+    // }
 
-    const navSelector = () => {
-        if (appContext.loggedIn === false) {
-            return null
-        } return <NavAdmin />
-    };
+    const hayTrArr = [appContext.hayTr1, appContext.hayTr2, appContext.hayTr3, appContext.hayTr4, appContext.hayTr5, appContext.hayTr6];
+    
+    const createHayTr = hayTrArr.map((tr, i) => {
+        const trIndex = i + 1;
+        const trName = `setHayTr${trIndex}`;
+        const trAlt = `hayTr${trIndex}`;
+        return (
+            <Tr key={`${trName}_${trAlt}`} className="tr">
+                <Td><input value={tr[0]} name={trName} alt={trAlt} key={`${trName}_${trAlt}0`} className="0" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td><input value={tr[1]} name={trName} alt={trAlt} key={`${trName}_${trAlt}1`} className="1" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td><input value={tr[2]} name={trName} alt={trAlt} key={`${trName}_${trAlt}2`} className="2" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td><input value={tr[3]} name={trName} alt={trAlt} key={`${trName}_${trAlt}3`} className="3" onChange={(event) => changeHandler(event)}></input></Td>
+            </Tr>
+        )
+    })
 
+    const honeyTrArr = [appContext.honeyTr1, appContext.honeyTr2];
+
+    const createHoneyTr = honeyTrArr.map((tr, i) => {
+        const trIndex = i + 1;
+        const trName = `setHoneyTr${trIndex}`;
+        const trAlt = `honeyTr${trIndex}`;
+        return (
+            <Tr key={`${trName}_${trAlt}`} className="tr">
+                <Td className="honey-type-td"><input value={tr[0]} name={trName} alt={trAlt} key={`${trName}_${trAlt}0`} className="0" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr[1]} name={trName} alt={trAlt} key={`${trName}_${trAlt}1`} className="1" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr[2]} name={trName} alt={trAlt} key={`${trName}_${trAlt}2`} className="2" onChange={(event) => changeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr[3]} name={trName} alt={trAlt} key={`${trName}_${trAlt}3`} className="3" onChange={(event) => changeHandler(event)}></input></Td>
+            </Tr>
+        ) 
+    })
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <div className="Farm-name">
-                    Hopfe Farm
-                </div>
-                <div>
-                    {navSelector()}
-                </div>
-            </header>
-            {adminPageDisplayed()}
-        </div >
+        <div className="admin-app">
+            <h1 className="admin-hay-header">Hay Table</h1>
+            <Table>
+                <Thead>
+                    <Tr>
+                        <Th className="hay-table-header">{appContext.hayHeader[0]}</Th>
+                        <Th className="hay-table-header">{appContext.hayHeader[1]}</Th>
+                        <Th className="hay-table-header">{appContext.hayHeader[2]}</Th>
+                        <Th className="hay-table-header">{appContext.hayHeader[3]}</Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    {createHayTr}
+                </Tbody>
+            </Table>
+            <h2 className="admin-honey-header">Honey Table</h2>
+            <Table>
+                <Thead>
+                    <Tr>
+                        <Th className="honey-table-header">{appContext.honeyHeader[0]}</Th>
+                        <Th className="honey-table-header">{appContext.honeyHeader[1]}</Th>
+                        <Th className="honey-table-header">{appContext.honeyHeader[2]}</Th>
+                        <Th className="honey-table-header">{appContext.honeyHeader[3]}</Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                   {createHoneyTr}
+                </Tbody>
+            </Table>
+        </div>
     )
-};
+}
 
-export default Admin;
+export default AdminApp;
