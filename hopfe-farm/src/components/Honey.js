@@ -13,22 +13,17 @@ const Honey = () => {
     });
 
     const createTr = honeyTrArr.map((tr) => {
+        let availability = "Sold Out";
         if (tr[2] > 0) {
-            return (
-                <Tr key={`${tr[0]}_${tr[1]}`} className="tr">
-                    <Td key={`${tr[0]}_${tr[1]}`+1} className="honey-type-td">{tr[0]}</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+2} className="honey-td">{tr[1]}</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+3} className="honey-td">Available</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+4} className="honey-td">{tr[3]}</Td>
-                </Tr>
-            )
-        } return (
-                <Tr key={`${tr[0]}_${tr[1]}`} className="tr">
-                    <Td key={`${tr[0]}_${tr[1]}`+1} className="honey-type-td">{tr[0]}</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+2} className="honey-td">{tr[1]}</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+3} className="honey-td">Sold Out</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+4} className="honey-td">{tr[3]}</Td>
-                </Tr>
+            availability = "Available";
+        }
+        return (
+            <Tr key={`${tr[0]}_${tr[1]}`} className="tr">
+                <Td key={`${tr[0]}_${tr[1]}`+1} className="honey-type-td">{tr[0]}</Td>
+                <Td key={`${tr[0]}_${tr[1]}`+2} className="honey-td">{tr[1]}</Td>
+                <Td key={`${tr[0]}_${tr[1]}`+3} className="honey-td">{availability}</Td>
+                <Td key={`${tr[0]}_${tr[1]}`+4} className="honey-td">{tr[3]}</Td>
+            </Tr>
         )
     })
 
