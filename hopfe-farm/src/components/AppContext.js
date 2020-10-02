@@ -7,8 +7,9 @@ export const ContextProvider = (props) => {
     const [apiUrl, setApiUrl] = useState("http://localhost:5000");
     const [homeUrl, setHomeUrl] = useState("http://localhost:3000/");
     const [loggedIn, setLoggedIn] = useState(false);
+    const [token, setToken] = useState(null);
     
-    const [hayHeader, setHayHeader] = useState(["Hay Type", "Bale Quality", "Quantity", "Price/Bale"]);
+    const [hayHeader, setHayHeader] = useState(["Hay Type", "Bale Quality", "Availability", "Price/Bale"]);
     const [hayTr1, setHayTr1] = useState(["5% Alfalfa", "No Rain", (5).toFixed(0), "$ "+(125.00).toFixed(2)]);
     const [hayTr2, setHayTr2] = useState(["30% Alfalfa", "No Rain", (39).toFixed(0), "$ "+(120.00).toFixed(2)]);
     const [hayTr3, setHayTr3] = useState(["5% Alfalfa", "Some Rain", (0).toFixed(0), "$ "+(100.00).toFixed(2)]);
@@ -16,7 +17,7 @@ export const ContextProvider = (props) => {
     const [hayTr5, setHayTr5] = useState(["5% Alfalfa", "Heavy Rain", (0).toFixed(0), "$ "+(20.00).toFixed(2)]);
     const [hayTr6, setHayTr6] = useState(["30% Alfalfa", "Heavy Rain", (0).toFixed(0), "$ "+(20.00).toFixed(2)]);
 
-    const [honeyHeader, setHoneyHeader] = useState(["Honey Type", "Honey Size", "Quantity", "Price/Unit"]);
+    const [honeyHeader, setHoneyHeader] = useState(["Honey Type", "Honey Size", "Availability", "Price/Unit"]);
     const [honeyTr1, setHoneyTr1] = useState(["Wildflower/Alfalfa", "340ml(12oz)", (6).toFixed(0), "$ "+(10.00).toFixed(2)]);
     const [honeyTr2, setHoneyTr2] = useState(["Wildflower/Alfalfa", "500ml(17.6oz)", (0).toFixed(0), "$ "+(15.00).toFixed(2)]);
 
@@ -64,7 +65,9 @@ export const ContextProvider = (props) => {
             homeUrl,
             setHomeUrl,
             loggedIn,
-            setLoggedIn
+            setLoggedIn,
+            token,
+            setToken
         }}>
             {props.children}
         </AppContext.Provider>
