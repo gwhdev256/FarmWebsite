@@ -16,7 +16,6 @@ const AdminLogin = (props) => {
     
     useEffect(() => {
         appContext.setSelectedIcon("login");
-        console.log(props);
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSubmit = async() => {
