@@ -10,16 +10,16 @@ def client():
     app.app.config['TESTING'] = True
     app.app.config['SQALCHEMY_TRACK_MODIFICATIONS'] = False 
     db.init_app(app.app)
-    rv = client.post('/register', json={"username": "TestUser", "password": "TestPass"})
+    client.post('/register', json={"username": "TestUser", "password": "TestPass"})
     rv = client.post('/login', json={"username": "TestUser", "password": "TestPass"})
     json = rv.get_json()
     setup_token = json["access_token"]
-    rv = client.delete('/user', headers={"Authorization" : f"Bearer {setup_token}"})
-    rv = client.post('/register', json={"username": "TestUser1", "password": "TestPass"})
+    client.delete('/user', headers={"Authorization" : f"Bearer {setup_token}"})
+    client.post('/register', json={"username": "TestUser1", "password": "TestPass"})
     rv = client.post('/login', json={"username": "TestUser1", "password": "TestPass"})
     json = rv.get_json()
     setup_token2 = json["access_token"]
-    rv = client.delete('/user', headers={"Authorization" : f"Bearer {setup_token2}"})
+    client.delete('/user', headers={"Authorization" : f"Bearer {setup_token2}"})
     yield client
  
 
@@ -38,17 +38,14 @@ def test_register(client):
 
 def test_login(client):
     #http://localhost:5000/login
-    rv = client.post('/register', json={"username": "TestUser", "password": "TestPass"})
+    client.post('/register', json={"username": "TestUser", "password": "TestPass"})
 
     rv = client.post('/login', json={"username": "TestUser", "password": "TestPass"})
     json = rv.get_json()
     assert("access_token" in json)
     assert(rv.status_code == 200)
 
-    setup_token = json["access_token"]
-
     rv = client.post('/login', json={"username": "WrongTestUser", "password": "TestPass"})
-    json = rv.get_json()
     assert(rv.status_code == 401)
 
     rv = client.post('/login', json={"username": "TestUser", "password": "WrongTestPass68JwIotpIXNa"})
@@ -57,7 +54,7 @@ def test_login(client):
 
 
 def test_delete(client):
-    rv = client.post('/register', json={"username": "TestUser", "password": "TestPass"})
+    client.post('/register', json={"username": "TestUser", "password": "TestPass"})
     rv = client.post('/login', json={"username": "TestUser", "password": "TestPass"})
     json = rv.get_json()    
     token = json["access_token"]
@@ -72,7 +69,7 @@ def test_delete(client):
 
 
 def test_get(client):
-    rv = client.post('/register', json={"username": "TestUser1", "password": "TestPass"})
+    client.post('/register', json={"username": "TestUser1", "password": "TestPass"})
     rv = client.post('/login', json={"username": "TestUser1", "password": "TestPass"})
     json = rv.get_json()    
     token = json["access_token"]
@@ -85,7 +82,7 @@ def test_get(client):
     assert(json['username'] == 'TestUser1')
     assert(rv.status_code == 200)
 
-    rv = client.delete('/user', headers={"Authorization" : f"Bearer {token}"})
+    client.delete('/user', headers={"Authorization" : f"Bearer {token}"})
     
     rv = client.get('/user', headers={"Authorization" : f"Bearer {token}"})
     assert(rv.status_code == 404)
