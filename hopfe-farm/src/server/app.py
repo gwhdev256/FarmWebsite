@@ -5,6 +5,7 @@ from flask_cors import CORS
 from db import db
 
 from resources.users import UserRegister, User, UserLogin
+from resources.table_data import Table, CreateTable
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -25,6 +26,8 @@ jwt = JWTManager(app)
 api.add_resource(UserRegister, '/register')
 api.add_resource(User, '/user')
 api.add_resource(UserLogin, '/login')
+api.add_resource(Table, '/table/<string:tablename>')
+api.add_resource(CreateTable, '/create')
 
 if __name__ == '__main__':
     print("--- Starting", __file__)
