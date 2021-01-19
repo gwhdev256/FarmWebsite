@@ -6,27 +6,24 @@ import { AppContext } from './AppContext.js';
 
 const Hay = () => {
     const appContext = React.useContext(AppContext);
-    const hayTrArr = [appContext.hayTr1, appContext.hayTr2, appContext.hayTr3, appContext.hayTr4, appContext.hayTr5, appContext.hayTr6];
 
     useEffect(() => {
         appContext.setSelectedIcon("hay");
     });
 
-    const createTr = hayTrArr.map((tr) => {
+    const createTr = appContext.hayTr.map((tr) => {
+        let availability;
         if (tr[2] > 0) {
-            return (
+            availability = "Available";
+        } else {
+            availability = "Sold Out";
+        }
+        
+        return (
                 <Tr key={`${tr[0]}_${tr[1]}`} className="tr">
                     <Td key={`${tr[0]}_${tr[1]}`+1}>{tr[0]}</Td>
                     <Td key={`${tr[0]}_${tr[1]}`+2}>{tr[1]}</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+3}>Available</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+4}>{tr[3]}</Td>
-                </Tr>
-            )
-        } return (
-                <Tr key={`${tr[0]}_${tr[1]}`} className="tr">
-                    <Td key={`${tr[0]}_${tr[1]}`+1}>{tr[0]}</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+2}>{tr[1]}</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+3}>Sold Out</Td>
+                    <Td key={`${tr[0]}_${tr[1]}`+3}>{availability}</Td>
                     <Td key={`${tr[0]}_${tr[1]}`+4}>{tr[3]}</Td>
                 </Tr>
         )
