@@ -4,15 +4,15 @@ import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import { AppContext } from './AppContext.js';
 
+
 const Honey = () => {
     const appContext = React.useContext(AppContext);
-    const honeyTrArr = [appContext.honeyTr1, appContext.honeyTr2];
 
     useEffect(() => {
         appContext.setSelectedIcon("honey");
     });
 
-    const createTr = honeyTrArr.map((tr) => {
+    const createTr = appContext.honeyTr.map((tr) => {
         let availability = "Sold Out";
         if (tr[2] > 0) {
             availability = "Available";
