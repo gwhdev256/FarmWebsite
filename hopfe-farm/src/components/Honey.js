@@ -25,7 +25,7 @@ const Honey = () => {
                 <Td key={`${tr[0]}_${tr[1]}`+4} className="honey-td">{tr[3]}</Td>
             </Tr>
         )
-    })
+    });
 
     return (
         <div className="honey-app">
