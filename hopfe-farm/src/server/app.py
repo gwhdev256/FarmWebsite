@@ -5,7 +5,7 @@ from flask_cors import CORS
 from db import db
 
 from resources.users import UserRegister, User, UserLogin
-from resources.table_data import Table, CreateTable
+from resources.tables import Table, CreateTable
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
