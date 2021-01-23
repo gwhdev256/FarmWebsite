@@ -4,30 +4,33 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.honey_data import HoneyDataModel
 
 
-class CreateFieldData(Resource):
+class CreateHoneyData(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('row_index',
+    parser.add_argument('HoneyType',
+        type=str,
+        required=True,
+        help="Body must contain HoneyType (ex. Wildflower/Alfalfa)."
+    )
+    parser.add_argument('HoneySize',
         type=int,
         required=True,
-        help="Body must contain row_index"
+        help="Body must contain a HoneySize (in ml)."
     )
-    parser.add_argument('column_index',
+    parser.add_argument('Quantity',
         type=int,
-        required=True,
-        help="Body must contain column_index"
     )
-    parser.add_argument('field_data',
-        type=str
+    parser.add_argument('Price',
+        type=float,
     )
 
     @jwt_required
     def post(self):
-        data = CreateFieldData.parser.parse_args()
+        data = CreateHoneyData.parser.parse_args()
 
-        if HoneyDataModel.find_by_column_index_and_row_index(data['column_index'], data['row_index']):
-            return {'message': 'Data for that field already exists.'}, 404
+        if HoneyDataModel.find_by_honey_type_and_honey_size(data['HoneyType'], data['HoneySize']):
+            return {'message': 'Data for that honey type and size already exists.'}, 404
 
-        new_data = HoneyDataModel(data['row_index'], data['column_index'], data['field_data'])
+        new_data = HoneyDataModel(data['HoneyType'], data['HoneySize'], data['Quantity'], data['Price'])
         new_data.save_to_db()
 
-        return {'message': 'New field data added successfully.'}, 200
+        return {'message': 'Data added successfully.'}, 200
