@@ -1,20 +1,28 @@
 from db import db
 
 class HoneyDataModel(db.Model):
-    __tablename__= "honey"
+    __tablename__= "Honey"
 
     id = db.Column(db.Integer, primary_key=True)
-    row_index = db.Column(db.Integer, nullable=False)
-    column_index = db.Column(db.Integer, nullable=False)
-    field_data = db.Column(db.String)
+    HoneyType = db.Column(db.String, nullable=False)
+    HoneySize = db.Column(db.Integer, nullable=False)
+    Quantity = db.Column(db.Integer, nullable=False)
+    Price = db.Column(db.Float(precision=2), nullable=False)
 
-    def __init__(self, row_index, column_index, field_data)
-        self.row_index = row_index
-        self.column_index = column_index
-        self.field_data = field_data
+    def __init__(self, honey_type, honey_size, quantity, price)
+        self.HoneyType = honey_type
+        self.HoneySize = honey_size
+        self.Quantity = quantity
+        self.Price = price
 
     def json(self):
-        return {'row_index': self.row_index, 'column_index': self.column_index, 'field_data': self.field_data}
+        return 
+            {
+                'HoneyType': self.HoneyType, 
+                'HoneySize': self.HoneySize, 
+                'Quantity': self.Quantity, 
+                'Price': self.Price
+            }
 
     def save_to_db(self):
         db.session.add(self)
@@ -29,13 +37,13 @@ class HoneyDataModel(db.Model):
         return cls.query.filter_by(id=_id).first()
 
     @classmethod
-    def find_by_row_index(cls, row)
-        return cls.query.filter_by(row_index=row)
+    def find_by_honey_type(cls, honey_type)
+        return cls.query.filter_by(HoneyType=honey_type)
 
     @classmethod
-    def find_by_column_index(cls, col)
-        return cls.query.filter_by(column_index=col)
+    def find_by_honey_size(cls, honey_size)
+        return cls.query.filter_by(HoneySize=honey_size)
 
     @classmethod
-    def find_by_column_index_and_row_index(cls, col, row)
-        return cls.query.filter_by(column_index=col, row_index=row).first()
+    def find_by_honey_type_and_honey_size(cls, honey_type, honey_size)
+        return cls.query.filter_by(HoneyType=honey_type, HoneySize=honey_size).first()
