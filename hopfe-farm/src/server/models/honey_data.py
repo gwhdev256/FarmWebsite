@@ -9,15 +9,14 @@ class HoneyDataModel(db.Model):
     Quantity = db.Column(db.Integer, nullable=False)
     Price = db.Column(db.Float(precision=2), nullable=False)
 
-    def __init__(self, honey_type, honey_size, quantity, price)
+    def __init__(self, honey_type, honey_size, quantity, price):
         self.HoneyType = honey_type
         self.HoneySize = honey_size
         self.Quantity = quantity
         self.Price = price
 
     def json(self):
-        return 
-            {
+        return {
                 'HoneyType': self.HoneyType, 
                 'HoneySize': self.HoneySize, 
                 'Quantity': self.Quantity, 
@@ -37,13 +36,13 @@ class HoneyDataModel(db.Model):
         return cls.query.filter_by(id=_id).first()
 
     @classmethod
-    def find_by_honey_type(cls, honey_type)
+    def find_by_honey_type(cls, honey_type):
         return cls.query.filter_by(HoneyType=honey_type)
 
     @classmethod
-    def find_by_honey_size(cls, honey_size)
+    def find_by_honey_size(cls, honey_size):
         return cls.query.filter_by(HoneySize=honey_size)
 
     @classmethod
-    def find_by_honey_type_and_honey_size(cls, honey_type, honey_size)
+    def find_by_honey_type_and_honey_size(cls, honey_type, honey_size):
         return cls.query.filter_by(HoneyType=honey_type, HoneySize=honey_size).first()
