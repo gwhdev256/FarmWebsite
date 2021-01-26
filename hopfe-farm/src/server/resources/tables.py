@@ -38,7 +38,7 @@ class CreateTable(Resource):
 
 class Table(Resource):
     @classmethod
-    def get(self, tablename):
+    def get(cls, tablename):
         table = TablesModel.find_by_table_name(tablename)
 
         if table:
@@ -47,7 +47,7 @@ class Table(Resource):
 
     @classmethod
     @jwt_required
-    def delete(self, tablename):
+    def delete(cls, tablename):
         table = TablesModel.find_by_table_name(tablename)
 
         if table:
