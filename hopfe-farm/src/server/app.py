@@ -6,7 +6,7 @@ from db import db
 
 from resources.users import UserRegister, User, UserLogin
 from resources.tables import Table, CreateTable
-from resources.honey_data import HoneyData, HoneyList
+from resources.honey_data import CreateHoneyData, HoneyData, HoneyList
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -28,8 +28,9 @@ api.add_resource(UserRegister, '/register')
 api.add_resource(User, '/user')
 api.add_resource(UserLogin, '/login')
 api.add_resource(Table, '/table/<string:tablename>')
-api.add_resource(CreateTable, '/create')
-api.add_resource(HoneyData, '/honey')
+api.add_resource(CreateTable, '/createtable')
+api.add_resource(CreateHoneyData, '/createhoney')
+api.add_resource(HoneyData, '/honey/<int:_id>')
 api.add_resource(HoneyList, '/honeylist')
 
 if __name__ == '__main__':
