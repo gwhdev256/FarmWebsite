@@ -25,7 +25,7 @@ class CreateHoneyData(Resource):
 
     @jwt_required
     def post(self):
-        data = HoneyData.parser.parse_args()
+        data = CreateHoneyData.parser.parse_args()
 
         if HoneyDataModel.find_by_honey_type_and_honey_size(data['HoneyType'], data['HoneySize']):
             return {'message': 'Data for that honey type and size already exists.'}, 404
