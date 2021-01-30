@@ -17,10 +17,20 @@ class CreateHayData(Resource):
         help="Body must contain a BaleQuality (No Rain / Some Rain / Heavy Rain)."
     )
     parser.add_argument('Quantity',
-        type=int
+        type=int,
+        required=True,
+        help="Body must contain a Quantity."
     )
     parser.add_argument('Price',
-        type=float
+        type=float,
+        required=True,
+        help="Body must contain Price."
+    )
+    parser.add_argument('NewHayType',
+        type=str
+    )
+    parser.add_argument('NewBaleQuality',
+        type=str
     )
 
     @jwt_required
@@ -37,7 +47,24 @@ class CreateHayData(Resource):
             return {"message": "An error occurred while inserting the item."}, 500
 
         return {'message': 'Data added successfully.'}, 201
+    
+    @jwt_required
+    def put(self):
+        data = CreateHayData.parser.parse_args()
+        
+        hay_data = HayDataModel.find_by_hay_type_and_bale_quality(data['HayType'], data['BaleQuality'])
 
+        if hay_data:
+            if data['NewHayType'] and data['NewBaleQuality']:
+                hay_data.HayType = data['NewHayType']
+                hay_data.BaleQuality = data['NewBaleQuality']
+                hay_data.Quantity = data['Quantity']
+                hay_data.Price = data['Price']
+                hay_data.save_to_db()
+                return {'message': 'Hay entry updated successfully.'}, 200
+            else:
+                return {'message': 'Please provide NewHayType and NewBaleQuality in body.'}, 400
+        return {'message': "Original hay entry not found. Cannot be updated."}, 404
 
 class HayData(Resource):
     def get(self, _id):

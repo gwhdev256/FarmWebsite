@@ -17,10 +17,20 @@ class CreateHoneyData(Resource):
         help="Body must contain a HoneySize (in ml)."
     )
     parser.add_argument('Quantity',
-        type=int
+        type=int,
+        required=True,
+        help="Body must contain a Quantity."
     )
     parser.add_argument('Price',
-        type=float
+        type=float,
+        required=True,
+        help="Body must contain a Price."
+    )
+    parser.add_argument('NewHoneyType',
+        type=str
+    )
+    parser.add_argument('NewHoneySize',
+        type=int
     )
 
     @jwt_required
@@ -37,6 +47,24 @@ class CreateHoneyData(Resource):
             return {"message": "An error occurred while inserting the item."}, 500
 
         return {'message': 'Data added successfully.'}, 201
+
+    @jwt_required
+    def put(self):
+        data = CreateHoneyData.parser.parse_args()
+        
+        honey_data = HoneyDataModel.find_by_honey_type_and_honey_size(data['HoneyType'], data['HoneySize'])
+
+        if honey_data:
+            if data['NewHoneyType'] and data['NewHoneySize']:
+                honey_data.HayType = data['NewHayType']
+                honey_data.HoneySize = data['NewHoneySize']
+                honey_data.Quantity = data['Quantity']
+                honey_data.Price = data['Price']
+                honey_data.save_to_db()
+                return {'message': 'Hay entry updated successfully.'}, 200
+            else:
+                return {'message': 'Please provide NewHoneyType and NewHoneySize in body.'}, 400
+        return {'message': "Original honey entry not found. Cannot be updated."}, 404
 
 
 class HoneyData(Resource):
