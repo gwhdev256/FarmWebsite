@@ -5,7 +5,7 @@ from flask_cors import CORS
 from db import db
 
 from resources.users import UserRegister, User, UserLogin
-from resources.tables import Table, CreateTable
+from resources.contact_data import ContactData, CreateContactData
 from resources.honey_data import CreateHoneyData, HoneyData, HoneyList
 from resources.hay_data import CreateHayData, HayData, HayList
 
@@ -28,8 +28,8 @@ jwt = JWTManager(app)
 api.add_resource(UserRegister, '/register')
 api.add_resource(User, '/user')
 api.add_resource(UserLogin, '/login')
-api.add_resource(Table, '/table/<string:tablename>')
-api.add_resource(CreateTable, '/createtable')
+api.add_resource(CreateContactData, '/createcontact')
+api.add_resource(ContactData, '/contact/<int:_id>')
 api.add_resource(CreateHoneyData, '/createhoney')
 api.add_resource(HoneyData, '/honey/<int:_id>')
 api.add_resource(HoneyList, '/honeylist')
