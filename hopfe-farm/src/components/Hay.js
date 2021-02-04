@@ -27,7 +27,7 @@ const Hay = () => {
                     <Td key={`${tr[0]}_${tr[1]}`+4}>{tr[3]}</Td>
                 </Tr>
         )
-    })
+    });
 
     return (
         <div className="hay-app">
