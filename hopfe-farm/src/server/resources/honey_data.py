@@ -56,12 +56,12 @@ class CreateHoneyData(Resource):
 
         if honey_data:
             if data['NewHoneyType'] and data['NewHoneySize']:
-                honey_data.HayType = data['NewHayType']
+                honey_data.HoneyType = data['NewHoneyType']
                 honey_data.HoneySize = data['NewHoneySize']
                 honey_data.Quantity = data['Quantity']
                 honey_data.Price = data['Price']
                 honey_data.save_to_db()
-                return {'message': 'Hay entry updated successfully.'}, 200
+                return {'message': 'Honey entry updated successfully.'}, 200
             else:
                 return {'message': 'Please provide NewHoneyType and NewHoneySize in body.'}, 400
         return {'message': "Original honey entry not found. Cannot be updated."}, 404
@@ -75,16 +75,15 @@ class HoneyData(Resource):
         return {'message': 'id not found'}, 404
 
     @jwt_required
-    def delete(self):
+    def delete(self, _id):
         honey = HoneyDataModel.find_by_id(_id)
         if honey:
             honey.delete_from_db()
-            return {'message': 'Level successfully deleted.'}, 200
+            return {'message': 'Honey entry successfully deleted.'}, 200
         return {'message': 'id not found'}, 404
 
 
 class HoneyList(Resource):
-    @jwt_required
     def get(self):
         honey_categories = [honey.json() for honey in HoneyDataModel.find_all()]
         return {'honey': honey_categories}, 200
