@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
+import { fetchGetFunc } from './Fetch';
+
 export const AppContext = React.createContext();
 
 export const ContextProvider = (props) => {
     const [selectedIcon, setSelectedIcon] = useState("home");
-    const [apiUrl, setApiUrl] = useState("http://localhost:5000");
+    const [apiUrl, setApiUrl] = useState("http://localhost:5000/");
     const [homeUrl, setHomeUrl] = useState("http://localhost:3000/");
     const [loggedIn, setLoggedIn] = useState(false);
     const [token, setToken] = useState(null);
@@ -29,6 +31,17 @@ export const ContextProvider = (props) => {
                                         ]
                                         
     );
+    
+
+    const hayTrHandler = async (url = `${apiUrl}haylist`, urlMethod = 'GET') => {
+        const response = await fetch(url, {
+            method: urlMethod,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        setHayTr(response.json());
+    };
 
     
     return (
