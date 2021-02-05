@@ -9,7 +9,17 @@ export const fetchFunc = async (url = '', urlMethod = 'GET', data = {}) => {
         body: JSON.stringify(data)
     });
     return response.json();
-}
+};
+
+export const fetchGetFunc = async (url = '', urlMethod = 'GET') => {
+    const response = await fetch(url, {
+        method: urlMethod,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    });
+    return response.json();
+};
 
 export const useFetchWithAuth = (url = '', urlMethod = 'GET', token = '') => {
     const [data, setData] = useState(null);
