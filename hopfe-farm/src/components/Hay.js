@@ -8,24 +8,27 @@ const Hay = () => {
     const appContext = React.useContext(AppContext);
 
     useEffect(() => {
-        appContext.setSelectedIcon("hay");
-        appContext.hayTrHandler();
-    });
+        const initialLoad = async () => {
+            await appContext.setSelectedIcon("hay");
+            await appContext.hayTrLoader();
+        }
+        initialLoad();
+    }, []);
 
     const createTr = appContext.hayTr.map((tr) => {
         let availability;
-        if (tr[2] > 0) {
+        if (tr.Quantity > 0) {
             availability = "Available";
         } else {
             availability = "Sold Out";
         }
         
         return (
-                <Tr key={`${tr[0]}_${tr[1]}`} className="tr">
-                    <Td key={`${tr[0]}_${tr[1]}`+1}>{tr[0]}</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+2}>{tr[1]}</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+3}>{availability}</Td>
-                    <Td key={`${tr[0]}_${tr[1]}`+4}>{tr[3]}</Td>
+                <Tr key={`${tr.HayType}_${tr.BaleQuality}`} className="tr">
+                    <Td key={`${tr.HayType}_${tr.BaleQuality}`+1}>{tr.HayType}</Td>
+                    <Td key={`${tr.HayType}_${tr.BaleQuality}`+2}>{tr.BaleQuality}</Td>
+                    <Td key={`${tr.HayType}_${tr.BaleQuality}`+3}>{availability}</Td>
+                    <Td key={`${tr.HayType}_${tr.BaleQuality}`+4}>{"$ "+(tr.Price).toFixed(2)}</Td>
                 </Tr>
         )
     });
