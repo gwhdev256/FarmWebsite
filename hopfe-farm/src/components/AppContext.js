@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import { fetchGetFunc } from './Fetch';
-
 export const AppContext = React.createContext();
 
 export const ContextProvider = (props) => {
@@ -12,16 +10,7 @@ export const ContextProvider = (props) => {
     const [token, setToken] = useState(null);
     
     const [hayHeader, setHayHeader] = useState(["Hay Type", "Bale Quality", "Availability", "Price/Bale"]);
-    const [hayTr, setHayTr] = useState(
-                                    [
-                                        ["5% Alfalfa", "No Rain", (5).toFixed(0), "$ "+(125.00).toFixed(2)],
-                                        ["30% Alfalfa", "No Rain", (39).toFixed(0), "$ "+(120.00).toFixed(2)],
-                                        ["5% Alfalfa", "Some Rain", (0).toFixed(0), "$ "+(100.00).toFixed(2)],
-                                        ["30% Alfalfa", "Some Rain", (0).toFixed(0), "$ "+(95.00).toFixed(2)],
-                                        ["5% Alfalfa", "Heavy Rain", (0).toFixed(0), "$ "+(20.00).toFixed(2)],
-                                        ["30% Alfalfa", "Heavy Rain", (0).toFixed(0), "$ "+(20.00).toFixed(2)]
-                                    ]
-    );
+    const [hayTr, setHayTr] = useState([]);
 
     const [honeyHeader, setHoneyHeader] = useState(["Honey Type", "Honey Size", "Availability", "Price/Unit"]);
     const [honeyTr, setHoneyTr] = useState(
@@ -33,14 +22,19 @@ export const ContextProvider = (props) => {
     );
     
 
-    const hayTrHandler = async (url = `${apiUrl}haylist`, urlMethod = 'GET') => {
+    const hayTrLoader = async (url = `${apiUrl}haylist`, urlMethod = 'GET') => {
         const response = await fetch(url, {
             method: urlMethod,
             headers: {
                 'Content-Type': 'application/json'
             },
         });
-        setHayTr(response.json());
+        let hayJson = response.json()
+        hayJson.then((result) => {
+            if (result.hay) {
+                setHayTr(result.hay);
+            }
+        })
     };
 
     
@@ -65,7 +59,7 @@ export const ContextProvider = (props) => {
             setLoggedIn,
             token,
             setToken,
-            hayTrHandler
+            hayTrLoader
         }}>
             {props.children}
         </AppContext.Provider>
