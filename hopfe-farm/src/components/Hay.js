@@ -9,6 +9,7 @@ const Hay = () => {
 
     useEffect(() => {
         appContext.setSelectedIcon("hay");
+        appContext.hayTrHandler();
     });
 
     const createTr = appContext.hayTr.map((tr) => {
