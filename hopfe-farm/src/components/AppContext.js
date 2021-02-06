@@ -64,7 +64,8 @@ export const ContextProvider = (props) => {
             loggedIn,
             setLoggedIn,
             token,
-            setToken
+            setToken,
+            hayTrHandler
         }}>
             {props.children}
         </AppContext.Provider>
