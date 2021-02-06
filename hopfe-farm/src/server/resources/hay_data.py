@@ -83,7 +83,6 @@ class HayData(Resource):
 
 
 class HayList(Resource):
-    @jwt_required
     def get(self):
         hay_categories = [hay.json() for hay in HayDataModel.find_all()]
         return {'hay': hay_categories}, 200
