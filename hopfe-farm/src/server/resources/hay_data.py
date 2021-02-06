@@ -74,11 +74,11 @@ class HayData(Resource):
         return {'message': 'id not found'}, 404
 
     @jwt_required
-    def delete(self):
+    def delete(self, _id):
         hay = HayDataModel.find_by_id(_id)
         if hay:
             hay.delete_from_db()
-            return {'message': 'Level successfully deleted.'}, 200
+            return {'message': 'Hay entry successfully deleted.'}, 200
         return {'message': 'id not found'}, 404
 
 
