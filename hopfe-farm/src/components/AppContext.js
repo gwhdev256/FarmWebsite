@@ -13,13 +13,7 @@ export const ContextProvider = (props) => {
     const [hayTr, setHayTr] = useState([]);
 
     const [honeyHeader, setHoneyHeader] = useState(["Honey Type", "Honey Size", "Availability", "Price/Unit"]);
-    const [honeyTr, setHoneyTr] = useState(
-                                        [
-                                            ["Wildflower/Alfalfa", "340ml(12oz)", (6).toFixed(0), "$ "+(10.00).toFixed(2)],
-                                            ["Wildflower/Alfalfa", "500ml(17.6oz)", (0).toFixed(0), "$ "+(15.00).toFixed(2)]
-                                        ]
-                                        
-    );
+    const [honeyTr, setHoneyTr] = useState([]);
     
 
     const hayTrLoader = async (url = `${apiUrl}haylist`, urlMethod = 'GET') => {
@@ -33,6 +27,21 @@ export const ContextProvider = (props) => {
         hayJson.then((result) => {
             if (result.hay) {
                 setHayTr(result.hay);
+            }
+        })
+    };
+
+    const honeyTrLoader = async (url = `${apiUrl}honeylist`, urlMethod = 'GET') => {
+        const response = await fetch(url, {
+            method: urlMethod,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        let honeyJson = response.json()
+        honeyJson.then((result) => {
+            if (result.honey) {
+                setHoneyTr(result.honey);
             }
         })
     };
@@ -59,7 +68,8 @@ export const ContextProvider = (props) => {
             setLoggedIn,
             token,
             setToken,
-            hayTrLoader
+            hayTrLoader,
+            honeyTrLoader
         }}>
             {props.children}
         </AppContext.Provider>
