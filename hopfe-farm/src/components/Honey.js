@@ -9,20 +9,24 @@ const Honey = () => {
     const appContext = React.useContext(AppContext);
 
     useEffect(() => {
-        appContext.setSelectedIcon("honey");
-    });
+        const initialLoad = async () => {
+            await appContext.setSelectedIcon("honey");
+            await appContext.honeyTrLoader();
+        }
+        initialLoad();
+    }, []);
 
     const createTr = appContext.honeyTr.map((tr) => {
         let availability = "Sold Out";
-        if (tr[2] > 0) {
+        if (tr.Quantity > 0) {
             availability = "Available";
         }
         return (
-            <Tr key={`${tr[0]}_${tr[1]}`} className="tr">
-                <Td key={`${tr[0]}_${tr[1]}`+1} className="honey-type-td">{tr[0]}</Td>
-                <Td key={`${tr[0]}_${tr[1]}`+2} className="honey-td">{tr[1]}</Td>
-                <Td key={`${tr[0]}_${tr[1]}`+3} className="honey-td">{availability}</Td>
-                <Td key={`${tr[0]}_${tr[1]}`+4} className="honey-td">{tr[3]}</Td>
+            <Tr key={`${tr.HoneyType}_${tr.HoneySize}`} className="tr">
+                <Td key={`${tr.HoneyType}_${tr.HoneySize}`+1} className="honey-type-td">{tr.HoneyType}</Td>
+                <Td key={`${tr.HoneyType}_${tr.HoneySize}`+2} className="honey-td">{tr.HoneySize}</Td>
+                <Td key={`${tr.HoneyType}_${tr.HoneySize}`+3} className="honey-td">{availability}</Td>
+                <Td key={`${tr.HoneyType}_${tr.HoneySize}`+4} className="honey-td">{"$ "+(tr.Price).toFixed(2)}</Td>
             </Tr>
         )
     });
