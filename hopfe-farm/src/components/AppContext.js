@@ -14,6 +14,8 @@ export const ContextProvider = (props) => {
 
     const [honeyHeader, setHoneyHeader] = useState(["Honey Type", "Honey Size", "Availability", "Price/Unit"]);
     const [honeyTr, setHoneyTr] = useState([]);
+
+    const [contactInfo, setContactInfo] = useState([]);
     
 
     const hayTrLoader = async (url = `${apiUrl}haylist`, urlMethod = 'GET') => {
@@ -58,6 +60,8 @@ export const ContextProvider = (props) => {
             setHoneyHeader,
             honeyTr,
             setHoneyTr,
+            contactInfo,
+            setContactInfo,
             selectedIcon,
             setSelectedIcon,
             apiUrl,
