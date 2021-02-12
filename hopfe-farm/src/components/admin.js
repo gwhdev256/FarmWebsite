@@ -19,7 +19,7 @@ const AdminApp = () => {
 
     useEffect(() => {
         initialLoad();
-    }, [firstLoad]);
+    }, []);
 
 
     const initialLoad = () => {
