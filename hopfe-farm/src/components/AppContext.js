@@ -6,7 +6,7 @@ export const ContextProvider = (props) => {
     const [selectedIcon, setSelectedIcon] = useState("home");
     const [apiUrl, setApiUrl] = useState("http://localhost:5000/");
     const [homeUrl, setHomeUrl] = useState("http://localhost:3000/");
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(true);
     const [token, setToken] = useState(null);
     
     const [hayHeader, setHayHeader] = useState(["Hay Type", "Bale Quality", "Availability", "Price/Bale"]);
