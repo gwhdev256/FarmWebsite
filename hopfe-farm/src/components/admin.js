@@ -10,7 +10,7 @@ const AdminApp = () => {
     const [hayData, setHayData] = useState([]);
     const [honeyData, setHoneyData] = useState([]);
     const [stateToggle, setStateToggle] = useState(true);
-    const [firstLoad, setFirstLoad] = useState(true);
+    // const [firstLoad, setFirstLoad] = useState(true);
 
     // useEffect(() => {
     //     setHayData(appContext.hayTr);
@@ -18,21 +18,43 @@ const AdminApp = () => {
     // }, []);
 
     useEffect(() => {
+        const initialLoad = async () => {
+            appContext.setSelectedIcon("admin");
+            await hayLoader();
+            await honeyLoader();
+        }
         initialLoad();
     }, []);
 
+    const hayLoader = async () => {
+        const response = await fetch(`${appContext.apiUrl}haylist`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        let hayJson = response.json();
+        hayJson.then((result) => {
+            if (result.hay) {
+                setHayData(result.hay);
+            }
+        });
+    }
 
-    const initialLoad = () => {
-        if (firstLoad) {
-            setFirstLoad(false);
-            appContext.setSelectedIcon("admin");
-            appContext.hayTrLoader();
-            appContext.honeyTrLoader();
-            stateToggleFunc();
-        }
-        // setHayData(appContext.hayTr);
-        // setHoneyData(appContext.honeyTr);
-    };
+    const honeyLoader = async () => {
+        const response = await fetch(`${appContext.apiUrl}honeylist`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        let honeyJson = response.json();
+        honeyJson.then((result) => {
+            if (result.honey) {
+                setHoneyData(result.honey)
+            }
+        });
+    }
 
     const stateToggleFunc = () => {
         if (stateToggle === true) {
@@ -66,9 +88,6 @@ const AdminApp = () => {
     //     console.log(appContext.hayTr)
     // };
 
-    // let createHayTr;
-
-    // let hayTrArr = hayData;
     const createHayTr = hayData.map((tr, i) => {
         return (
             <Tr key={`${i}row`} className="tr">
@@ -79,14 +98,13 @@ const AdminApp = () => {
             </Tr>
         )
     });
-    // if (hayData !== null) {
-    // };
-    
 
+    const addHayRow = () => {
+        let newHayRow = {HayType: "", BaleQuality: "", Quantity: 0, Price: 0};
+        let newHayData = hayData.push(newHayRow);
+        setHayData(newHayData);
+    }
 
-    // let createHoneyTr;
-
-    // let honeyTrArr = honeyData;
     const createHoneyTr = honeyData.map((tr, i) => {
         return (
             <Tr key={`${i}row`} className="tr">
@@ -97,8 +115,6 @@ const AdminApp = () => {
             </Tr>
         ) 
     });
-    // if (honeyData !== null) {
-    // };
 
     return (
         <div className="admin-app">
@@ -116,6 +132,9 @@ const AdminApp = () => {
                     {createHayTr}
                 </Tbody>
             </Table>
+            <div>
+                <button onClick={addHayRow}>Add Hay Row</button>
+            </div>
             <h2 className="admin-honey-header">Honey Table</h2>
             <Table>
                 <Thead>
