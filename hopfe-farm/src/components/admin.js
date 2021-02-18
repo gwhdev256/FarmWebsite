@@ -36,6 +36,9 @@ const AdminApp = () => {
                         setHayData(result.hay);
                         prevHayRef.current = result.hay;
                     }
+                })
+                .catch(err => {
+                    console.log(err);
                 });
             }
             const honeyLoader = async () => {
@@ -52,6 +55,9 @@ const AdminApp = () => {
                         setHoneyData(result.honey);
                         prevHoneyRef.current = result.honey;
                     }
+                })
+                .catch(err => {
+                    console.log(err);
                 });
             }
             await hayLoader();
@@ -116,6 +122,13 @@ const AdminApp = () => {
         prevHayRef.current = newHayData;
     }
 
+    const addHoneyRow = () => {
+        const newHoneyRow = {HoneyType: "", HoneySize: "", Quantity: 0, Price: 0};
+        const newHoneyData = [...prevHoneyRef.current, newHoneyRow];
+        setHoneyData(newHoneyData);
+        prevHoneyRef.current = newHoneyData;
+    }
+
     const createHoneyTr = honeyData.map((tr, i) => {
         return (
             <Tr key={`${i}row`} className="tr">
@@ -160,6 +173,9 @@ const AdminApp = () => {
                    {createHoneyTr}
                 </Tbody>
             </Table>
+            <div>
+                <button onClick={addHoneyRow}>Add Honey Row</button>
+            </div>
             <div className="admin-buttons-container">
                 {/* <button className="save-changes-button" onClick={saveChanges}>Save Changes</button> */}
                 <button className="cancel-changes-button">Cancel Changes</button>
