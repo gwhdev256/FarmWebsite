@@ -15,58 +15,53 @@ const AdminApp = () => {
     const prevHoneyRef = useRef();
 
     useEffect(() => {
-        const hayAbortController = new AbortController()
-        const haySignal = hayAbortController.signal
-        const honeyAbortController = new AbortController()
-        const honeySignal = honeyAbortController.signal
+        const controller = new AbortController();
+        const signal = controller.signal;
         
-        const initialLoad = async () => {    
+        const initialLoad = () => {    
             appContext.setSelectedIcon("admin");
             const hayLoader = async () => {
-                const response = await fetch(`${appContext.apiUrl}haylist`, {
-                    signal: haySignal,
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
+                try {
+                    const response = await fetch(`${appContext.apiUrl}haylist`, {signal});
+                    let hayJson = response.json();
+                    hayJson.then((result) => {
+                        if (result.hay) {
+                            setHayData(result.hay);
+                            prevHayRef.current = result.hay;
+                        }
+                    })
+                } catch(err) {
+                    if (err.name === 'AbortError') {
+                        console.log('Fetch aborted');
+                    } else {
+                    console.error('Uh oh, an error!', err);
                     }
-                });
-                let hayJson = response.json();
-                hayJson.then((result) => {
-                    if (result.hay) {
-                        setHayData(result.hay);
-                        prevHayRef.current = result.hay;
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+                }
             }
             const honeyLoader = async () => {
-                const response = await fetch(`${appContext.apiUrl}honeylist`, {
-                    signal: honeySignal,
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
+                try {
+                    const response = await fetch(`${appContext.apiUrl}honeylist`, {signal});
+                    let honeyJson = response.json();
+                    honeyJson.then((result) => {
+                        if (result.honey) {
+                            setHoneyData(result.honey);
+                            prevHoneyRef.current = result.honey;
+                        }
+                    })
+                } catch(err) {
+                    if (err.name === 'AbortError') {
+                        console.log('Fetch aborted');
+                    } else {
+                    console.error('Uh oh, an error!', err);
                     }
-                });
-                let honeyJson = response.json();
-                honeyJson.then((result) => {
-                    if (result.honey) {
-                        setHoneyData(result.honey);
-                        prevHoneyRef.current = result.honey;
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+                }
             }
-            await hayLoader();
-            await honeyLoader();
+            hayLoader();
+            honeyLoader();
         }
         initialLoad();
         return function cleanup(){
-            hayAbortController.abort();
-            honeyAbortController.abort();
+            controller.abort();
         }
     }, []);
 
