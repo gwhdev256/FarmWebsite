@@ -81,19 +81,19 @@ const AdminApp = () => {
     };
 
     const hayChangeHandler = (event) => {
-        let currentData = hayData;
-        let currentArray = event.target.name;
-        let currArrIndex = Number(event.target.className);
-        currentData[currentArray][currArrIndex] = event.target.value;
+        let currentData = prevHayRef.current;
+        let currentRow = event.target.name;
+        let currField = event.target.className;
+        currentData[currentRow][currField] = event.target.value;
         setHayData(currentData);
         stateToggleFunc();
     };
 
     const honeyChangeHandler = (event) => {
-        let currentData = honeyData;
+        let currentData = prevHoneyRef.current;
         let currentArray = event.target.name;
-        let currArrIndex = Number(event.target.className);
-        currentData[currentArray][currArrIndex] = event.target.value;
+        let currField = event.target.className;
+        currentData[currentArray][currField] = event.target.value;
         setHoneyData(currentData);
         stateToggleFunc();
     };
@@ -107,10 +107,10 @@ const AdminApp = () => {
     const createHayTr = hayData.map((tr, i) => {
         return (
             <Tr key={`${i}row`} className="tr">
-                <Td><input value={tr.HayType} name={i} key={`${i}0`} className="0" onChange={(event) => hayChangeHandler(event)}></input></Td>
-                <Td><input value={tr.BaleQuality} name={i} key={`${i}1`} className="1" onChange={(event) => hayChangeHandler(event)}></input></Td>
-                <Td><input value={tr.Quantity} name={i} key={`${i}2`} className="2" onChange={(event) => hayChangeHandler(event)}></input></Td>
-                <Td><input value={tr.Price} name={i} key={`${i}3`} className="3" onChange={(event) => hayChangeHandler(event)}></input></Td>
+                <Td><input value={tr.HayType} name={i} key={`${i}0`} className="HayType" onChange={(event) => hayChangeHandler(event)}></input></Td>
+                <Td><input value={tr.BaleQuality} name={i} key={`${i}1`} className="BaleQuality" onChange={(event) => hayChangeHandler(event)}></input></Td>
+                <Td><input value={tr.Quantity} name={i} key={`${i}2`} className="Quantity" onChange={(event) => hayChangeHandler(event)}></input></Td>
+                <Td><input value={tr.Price} name={i} key={`${i}3`} className="Price" onChange={(event) => hayChangeHandler(event)}></input></Td>
             </Tr>
         )
     });
@@ -132,10 +132,10 @@ const AdminApp = () => {
     const createHoneyTr = honeyData.map((tr, i) => {
         return (
             <Tr key={`${i}row`} className="tr">
-                <Td className="honey-type-td"><input value={tr.HoneyType} name={i} key={`${i}0`} className="0" onChange={(event) => honeyChangeHandler(event)}></input></Td>
-                <Td className="honey-td"><input value={tr.HoneySize} name={i} key={`${i}1`} className="1" onChange={(event) => honeyChangeHandler(event)}></input></Td>
-                <Td className="honey-td"><input value={tr.Quantity} name={i} key={`${i}2`} className="2" onChange={(event) => honeyChangeHandler(event)}></input></Td>
-                <Td className="honey-td"><input value={tr.Price} name={i} key={`${i}3`} className="3" onChange={(event) => honeyChangeHandler(event)}></input></Td>
+                <Td className="honey-type-td"><input value={tr.HoneyType} name={i} key={`${i}0`} className="HoneyType" onChange={(event) => honeyChangeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr.HoneySize} name={i} key={`${i}1`} className="HoneySize" onChange={(event) => honeyChangeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr.Quantity} name={i} key={`${i}2`} className="Quantity" onChange={(event) => honeyChangeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr.Price} name={i} key={`${i}3`} className="Price" onChange={(event) => honeyChangeHandler(event)}></input></Td>
             </Tr>
         ) 
     });
