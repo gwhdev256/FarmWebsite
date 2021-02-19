@@ -14,7 +14,7 @@ const Honey = () => {
             await appContext.honeyTrLoader();
         }
         initialLoad();
-    }, []);
+    }, [appContext]);
 
     const createTr = appContext.honeyTr.map((tr) => {
         let availability = "Sold Out";

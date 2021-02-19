@@ -13,7 +13,7 @@ const Hay = () => {
             await appContext.hayTrLoader();
         }
         initialLoad();
-    }, []);
+    }, [appContext]);
 
     const createTr = appContext.hayTr.map((tr) => {
         let availability;

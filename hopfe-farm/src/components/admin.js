@@ -63,7 +63,7 @@ const AdminApp = () => {
         return function cleanup(){
             controller.abort();
         }
-    }, []);
+    }, [appContext]);
 
 
 
