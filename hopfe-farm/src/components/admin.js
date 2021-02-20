@@ -34,7 +34,7 @@ const AdminApp = () => {
                     if (err.name === 'AbortError') {
                         console.log('Fetch aborted');
                     } else {
-                    console.error('Uh oh, an error!', err);
+                    console.error('Error:', err);
                     }
                 }
             }
@@ -52,7 +52,7 @@ const AdminApp = () => {
                     if (err.name === 'AbortError') {
                         console.log('Fetch aborted');
                     } else {
-                    console.error('Uh oh, an error!', err);
+                    console.error('Error:', err);
                     }
                 }
             }
@@ -93,11 +93,18 @@ const AdminApp = () => {
         stateToggleFunc();
     };
 
-    // const saveChanges = async() => {
-    //     await appContext.setHayTr(hayData);
-    //     await appContext.setHoneyTr(honeyData);
-    //     console.log(appContext.hayTr)
-    // };
+    const saveChanges = async() => {
+        // step 1 - identify which fields have changed and which ones, if any, were added
+        // step 2 - create loop with if statement to cycle through the changed/added rows and 
+        //      fire a put or post. 
+        // step 3 - set up authentication to make sure specific values such as "No Rain" are spelled
+        //      and formatted correctly before firing api puts/posts.
+        // step 4 - set up error handling so that we can identify which api calls failed when any do fail
+        //      and to give user information on failures.
+        // try {
+        //     const response = await fetch(``)
+        // }
+    };
 
     const createHayTr = hayData.map((tr, i) => {
         return (
