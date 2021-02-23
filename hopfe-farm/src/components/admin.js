@@ -14,6 +14,9 @@ const AdminApp = () => {
     const prevHayRef = useRef();
     const prevHoneyRef = useRef();
 
+    const resetHayRef = useRef();
+    const resetHoneyRef = useRef();
+
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
@@ -28,6 +31,7 @@ const AdminApp = () => {
                         if (result.hay) {
                             setHayData(result.hay);
                             prevHayRef.current = result.hay;
+                            resetHayRef.current = result.hay;
                         }
                     })
                 } catch(err) {
@@ -46,6 +50,7 @@ const AdminApp = () => {
                         if (result.honey) {
                             setHoneyData(result.honey);
                             prevHoneyRef.current = result.honey;
+                            resetHoneyRef.current = result.honey;
                         }
                     })
                 } catch(err) {
@@ -93,7 +98,7 @@ const AdminApp = () => {
         stateToggleFunc();
     };
 
-    const saveChanges = async() => {
+    // const saveChanges = async() => {
         // step 1 - identify which fields have changed and which ones, if any, were added
         // step 2 - create loop with if statement to cycle through the changed/added rows and 
         //      fire a put or post. 
@@ -104,7 +109,14 @@ const AdminApp = () => {
         // try {
         //     const response = await fetch(``)
         // }
-    };
+    // };
+
+    const cancelChanges = () => {
+        setHayData(resetHayRef.current);
+        setHoneyData(resetHoneyRef.current);
+        prevHayRef.current = resetHayRef.current;
+        prevHoneyRef.current = resetHoneyRef.current;
+    }
 
     const createHayTr = hayData.map((tr, i) => {
         return (
@@ -180,7 +192,7 @@ const AdminApp = () => {
             </div>
             <div className="admin-buttons-container">
                 {/* <button className="save-changes-button" onClick={saveChanges}>Save Changes</button> */}
-                <button className="cancel-changes-button">Cancel Changes</button>
+                <button className="cancel-changes-button" onClick={cancelChanges}>Cancel Changes</button>
             </div>
         </div>
     )
