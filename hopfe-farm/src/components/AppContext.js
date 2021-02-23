@@ -18,13 +18,8 @@ export const ContextProvider = (props) => {
     const [contactInfo, setContactInfo] = useState([]);
     
 
-    const hayTrLoader = async (url = `${apiUrl}haylist`, urlMethod = 'GET') => {
-        const response = await fetch(url, {
-            method: urlMethod,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
+    const hayTrLoader = async () => {
+        const response = await fetch(`${apiUrl}haylist`);
         let hayJson = response.json()
         hayJson.then((result) => {
             if (result.hay) {
@@ -33,13 +28,8 @@ export const ContextProvider = (props) => {
         })
     };
 
-    const honeyTrLoader = async (url = `${apiUrl}honeylist`, urlMethod = 'GET') => {
-        const response = await fetch(url, {
-            method: urlMethod,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
+    const honeyTrLoader = async () => {
+        const response = await fetch(`${apiUrl}honeylist`);
         let honeyJson = response.json()
         honeyJson.then((result) => {
             if (result.honey) {
