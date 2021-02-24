@@ -20,22 +20,14 @@ export const ContextProvider = (props) => {
 
     const hayTrLoader = async () => {
         const response = await fetch(`${apiUrl}haylist`);
-        let hayJson = response.json()
-        hayJson.then((result) => {
-            if (result.hay) {
-                setHayTr(result.hay);
-            }
-        })
+        const { hay } = await response.json();
+        setHayTr(hay);
     };
 
     const honeyTrLoader = async () => {
         const response = await fetch(`${apiUrl}honeylist`);
-        let honeyJson = response.json()
-        honeyJson.then((result) => {
-            if (result.honey) {
-                setHoneyTr(result.honey);
-            }
-        })
+        const { honey } = response.json()
+        setHoneyTr(honey);
     };
 
     
