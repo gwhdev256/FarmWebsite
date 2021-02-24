@@ -21,43 +21,35 @@ const AdminApp = () => {
         const controller = new AbortController();
         const signal = controller.signal;
         
-        const initialLoad = () => {    
-            appContext.setSelectedIcon("admin");
+        const initialLoad = async() => {    
+            await appContext.setSelectedIcon("admin");
             const hayLoader = async () => {
                 try {
                     const response = await fetch(`${appContext.apiUrl}haylist`, {signal});
-                    let hayJson = response.json();
-                    hayJson.then((result) => {
-                        if (result.hay) {
-                            setHayData(result.hay);
-                            prevHayRef.current = result.hay;
-                            resetHayRef.current = result.hay;
-                        }
-                    })
+                    const { hay } = await response.json();
+                    setHayData(hay);
+                    prevHayRef.current = hay;
+                    resetHayRef.current = hay;
                 } catch(err) {
                     if (err.name === 'AbortError') {
-                        console.log('Fetch aborted');
+                        return "Fetch aborted";
                     } else {
-                    console.error('Error:', err);
+                        console.error('Error:', err);
                     }
                 }
             }
             const honeyLoader = async () => {
                 try {
                     const response = await fetch(`${appContext.apiUrl}honeylist`, {signal});
-                    let honeyJson = response.json();
-                    honeyJson.then((result) => {
-                        if (result.honey) {
-                            setHoneyData(result.honey);
-                            prevHoneyRef.current = result.honey;
-                            resetHoneyRef.current = result.honey;
-                        }
-                    })
+                    const { honey } = await response.json();
+                    setHoneyData(honey);
+                    prevHoneyRef.current = honey;
+                    resetHoneyRef.current = honey;
                 } catch(err) {
                     if (err.name === 'AbortError') {
-                        console.log('Fetch aborted');
+                        return "Fetch aborted";
                     } else {
-                    console.error('Error:', err);
+                        console.error('Error:', err);
                     }
                 }
             }
@@ -84,7 +76,12 @@ const AdminApp = () => {
         let currentData = prevHayRef.current;
         let currentRow = event.target.name;
         let currField = event.target.className;
-        currentData[currentRow][currField] = event.target.value;
+
+        if (currField === ("Quantity" || "Price")) {
+            currentData[currentRow][currField] = Number(event.target.value);
+        } else {
+            currentData[currentRow][currField] = String(event.target.value);
+        }
         setHayData(currentData);
         stateToggleFunc();
     };
@@ -98,7 +95,7 @@ const AdminApp = () => {
         stateToggleFunc();
     };
 
-    // const saveChanges = async() => {
+    const saveChanges = () => {
         // step 1 - identify which fields have changed and which ones, if any, were added
         // step 2 - create loop with if statement to cycle through the changed/added rows and 
         //      fire a put or post. 
@@ -106,16 +103,56 @@ const AdminApp = () => {
         //      and formatted correctly before firing api puts/posts.
         // step 4 - set up error handling so that we can identify which api calls failed when any do fail
         //      and to give user information on failures.
+        let resetHayData = {"HayType": "", "BaleQuality": "", "Quantity": 0, "Price": 0}
+
+        const fetchHay = async () => {
+            const response = await fetch(`${appContext.apiUrl}haylist`);
+            const { hay } = await response.json();
+            resetHayData = hay;
+            hayLoop();
+        }
+        
+        fetchHay();
+
+        const hayLoop = () => {
+            let hayChanges = [];
+            // let honeyChanges = [];
+    
+            let i;
+            for (i = 0; i < (hayData.length); i++) {
+                if (hayData[i]["HayType"] !== resetHayData[i]["HayType"] || hayData[i]["BaleQuality"] !== resetHayData[i]["BaleQuality"] || hayData[i]["Quantity"] !== resetHayData[i]["Quantity"] || hayData[i]["Price"] !== resetHayData[i]["Price"]) {
+                    hayChanges.push({hayRow: i, rowData: hayData[i]});
+                } else {
+                    console.log(hayData[i])
+                    console.log(resetHayData[i])
+                }
+            }
+            console.log(hayChanges)     
+        }
         // try {
         //     const response = await fetch(``)
+        // } catch(err){
+        //     console.log(err);
         // }
-    // };
+    };
 
     const cancelChanges = () => {
-        setHayData(resetHayRef.current);
-        setHoneyData(resetHoneyRef.current);
-        prevHayRef.current = resetHayRef.current;
-        prevHoneyRef.current = resetHoneyRef.current;
+        const resetHay = async () => {
+            const response = await fetch(`${appContext.apiUrl}haylist`);
+            const { hay } = await response.json();
+            setHayData(hay);
+            prevHayRef.current = hay;
+        }
+
+        const resetHoney = async () => {
+            const response = await fetch(`${appContext.apiUrl}honeylist`);
+            const { honey } = await response.json();
+            setHoneyData(honey);
+            prevHoneyRef.current = honey;
+        }
+
+        resetHay();
+        resetHoney();
     }
 
     const createHayTr = hayData.map((tr, i) => {
@@ -127,6 +164,17 @@ const AdminApp = () => {
                 <Td><input value={tr.Price} name={i} key={`${i}3`} className="Price" onChange={(event) => hayChangeHandler(event)}></input></Td>
             </Tr>
         )
+    });
+    
+    const createHoneyTr = honeyData.map((tr, i) => {
+        return (
+            <Tr key={`${i}row`} className="tr">
+                <Td className="honey-type-td"><input value={tr.HoneyType} name={i} key={`${i}0`} className="HoneyType" onChange={(event) => honeyChangeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr.HoneySize} name={i} key={`${i}1`} className="HoneySize" onChange={(event) => honeyChangeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr.Quantity} name={i} key={`${i}2`} className="Quantity" onChange={(event) => honeyChangeHandler(event)}></input></Td>
+                <Td className="honey-td"><input value={tr.Price} name={i} key={`${i}3`} className="Price" onChange={(event) => honeyChangeHandler(event)}></input></Td>
+            </Tr>
+        ) 
     });
 
     const addHayRow = () => {
@@ -143,16 +191,6 @@ const AdminApp = () => {
         prevHoneyRef.current = newHoneyData;
     }
 
-    const createHoneyTr = honeyData.map((tr, i) => {
-        return (
-            <Tr key={`${i}row`} className="tr">
-                <Td className="honey-type-td"><input value={tr.HoneyType} name={i} key={`${i}0`} className="HoneyType" onChange={(event) => honeyChangeHandler(event)}></input></Td>
-                <Td className="honey-td"><input value={tr.HoneySize} name={i} key={`${i}1`} className="HoneySize" onChange={(event) => honeyChangeHandler(event)}></input></Td>
-                <Td className="honey-td"><input value={tr.Quantity} name={i} key={`${i}2`} className="Quantity" onChange={(event) => honeyChangeHandler(event)}></input></Td>
-                <Td className="honey-td"><input value={tr.Price} name={i} key={`${i}3`} className="Price" onChange={(event) => honeyChangeHandler(event)}></input></Td>
-            </Tr>
-        ) 
-    });
 
     return (
         <div className="admin-app">
@@ -191,7 +229,7 @@ const AdminApp = () => {
                 <button onClick={addHoneyRow}>Add Honey Row</button>
             </div>
             <div className="admin-buttons-container">
-                {/* <button className="save-changes-button" onClick={saveChanges}>Save Changes</button> */}
+                <button className="save-changes-button" onClick={saveChanges}>Save Changes</button>
                 <button className="cancel-changes-button" onClick={cancelChanges}>Cancel Changes</button>
             </div>
         </div>
