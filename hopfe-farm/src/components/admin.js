@@ -57,7 +57,7 @@ const AdminApp = () => {
             honeyLoader();
         }
         initialLoad();
-        return function cleanup(){
+        return function cleanup() {
             controller.abort();
         }
     }, [appContext]);
@@ -65,7 +65,7 @@ const AdminApp = () => {
 
 
     const stateToggleFunc = () => {
-        if (stateToggle === true) {
+        if (stateToggle) {
             setStateToggle(false);
         } else {
             setStateToggle(true);
@@ -75,12 +75,12 @@ const AdminApp = () => {
     const hayChangeHandler = (event) => {
         let currentData = prevHayRef.current;
         let currentRow = event.target.name;
-        let currField = event.target.className;
+        let currentField = event.target.className;
 
-        if (currField === ("Quantity" || "Price")) {
-            currentData[currentRow][currField] = Number(event.target.value);
+        if (currentField === ("Quantity" || "Price")) {
+            currentData[currentRow][currentField] = Number(event.target.value);
         } else {
-            currentData[currentRow][currField] = String(event.target.value);
+            currentData[currentRow][currentField] = String(event.target.value);
         }
         setHayData(currentData);
         stateToggleFunc();
@@ -88,9 +88,14 @@ const AdminApp = () => {
 
     const honeyChangeHandler = (event) => {
         let currentData = prevHoneyRef.current;
-        let currentArray = event.target.name;
-        let currField = event.target.className;
-        currentData[currentArray][currField] = event.target.value;
+        let currentRow = event.target.name;
+        let currentField = event.target.className;
+
+        if (currentField === ("HoneyType")) {
+            currentData[currentRow][currentField] = String(event.target.value);
+        } else {
+            currentData[currentRow][currentField] = Number(event.target.value);
+        }
         setHoneyData(currentData);
         stateToggleFunc();
     };
@@ -104,6 +109,7 @@ const AdminApp = () => {
         // step 4 - set up error handling so that we can identify which api calls failed when any do fail
         //      and to give user information on failures.
         let resetHayData = {"HayType": "", "BaleQuality": "", "Quantity": 0, "Price": 0}
+        let resetHoneyData = {"HoneyType": "", "HoneySize": 0, "Quantity": 0, "Price": 0}
 
         const fetchHay = async () => {
             const response = await fetch(`${appContext.apiUrl}haylist`);
@@ -111,24 +117,65 @@ const AdminApp = () => {
             resetHayData = hay;
             hayLoop();
         }
-        
-        fetchHay();
 
+        const fetchHoney = async () => {
+            const response = await fetch(`${appContext.apiUrl}honeylist`);
+            const { honey } = await response.json();
+            resetHoneyData = honey;
+            honeyLoop();
+        }
+        
         const hayLoop = () => {
             let hayChanges = [];
             // let honeyChanges = [];
-    
+            
             let i;
-            for (i = 0; i < (hayData.length); i++) {
-                if (hayData[i]["HayType"] !== resetHayData[i]["HayType"] || hayData[i]["BaleQuality"] !== resetHayData[i]["BaleQuality"] || hayData[i]["Quantity"] !== resetHayData[i]["Quantity"] || hayData[i]["Price"] !== resetHayData[i]["Price"]) {
-                    hayChanges.push({hayRow: i, rowData: hayData[i]});
+            for (i = 0; i < hayData.length; i++) {
+                if (resetHayData[i]) {
+                    if (hayData[i]["HayType"] !== resetHayData[i]["HayType"] || hayData[i]["BaleQuality"] !== resetHayData[i]["BaleQuality"] || hayData[i]["Quantity"] !== resetHayData[i]["Quantity"] || hayData[i]["Price"] !== resetHayData[i]["Price"]) {
+                        if (hayData[i]["BaleQuality"] === "No Rain" || hayData[i]["BaleQuality"] === "Some Rain" || hayData[i]["BaleQuality"] === "Heavy Rain") {
+                            hayChanges.push({hayRow: i, rowData: hayData[i]});
+                        } else {
+                            console.log(hayData[i]["BaleQuality"])
+                            console.log("BaleQuality must be No Rain, Some Rain, or Heavy Rain")
+                        }
+                    } else {
+                        console.log(hayData[i])
+                        console.log(resetHayData[i])
+                    }
                 } else {
-                    console.log(hayData[i])
-                    console.log(resetHayData[i])
+                    if (hayData[i]["HayType"] !== "") {
+                        if (hayData[i]["BaleQuality"] === "No Rain" || hayData[i]["BaleQuality"] === "Some Rain" || hayData[i]["BaleQuality"] === "Heavy Rain") {
+                            console.log(hayData[i]["BaleQuality"])
+                            hayChanges.push({hayRow: i, rowData: hayData[i]})
+                        } else {
+                            console.log("BaleQuality must be No Rain, Some Rain, or Heavy Rain")
+                        }
+                    } else {
+                        console.log("HayType cannot be left blank.")
+                    }
                 }
             }
             console.log(hayChanges)     
         }
+
+        const honeyLoop = () => {
+            let honeyChanges = [];
+            
+            let i;
+            for (i = 0; i < honeyData.length; i++) {
+                if (honeyData[i]["HoneyType"] !== resetHoneyData[i]["HoneyType"] || honeyData[i]["HoneySize"] !== resetHoneyData[i]["HoneySize"] || honeyData[i]["Quantity"] !== resetHoneyData[i]["Quantity"] || honeyData[i]["Price"] !== resetHoneyData[i]["Price"]) {
+                    honeyChanges.push({honeyRow: i, rowData: honeyData[i]});
+                } else {
+                    console.log(honeyData[i])
+                    console.log(resetHoneyData[i])
+                }
+            }
+            console.log(honeyChanges)
+        }
+
+        fetchHay();
+        fetchHoney();
         // try {
         //     const response = await fetch(``)
         // } catch(err){
@@ -178,14 +225,14 @@ const AdminApp = () => {
     });
 
     const addHayRow = () => {
-        const newHayRow = {HayType: "", BaleQuality: "", Quantity: 0, Price: 0};
+        const newHayRow = {"HayType": "", "BaleQuality": "", "Quantity": 0, "Price": 0};
         const newHayData = [...prevHayRef.current, newHayRow];
         setHayData(newHayData);
         prevHayRef.current = newHayData;
     }
 
     const addHoneyRow = () => {
-        const newHoneyRow = {HoneyType: "", HoneySize: "", Quantity: 0, Price: 0};
+        const newHoneyRow = {"HoneyType": "", "HoneySize": "", "Quantity": 0, "Price": 0};
         const newHoneyData = [...prevHoneyRef.current, newHoneyRow];
         setHoneyData(newHoneyData);
         prevHoneyRef.current = newHoneyData;
