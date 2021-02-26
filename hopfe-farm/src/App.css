@@ -156,6 +156,11 @@
   text-shadow: 2px 2px rgba(0, 0, 0, 0.664);
 }
 
+.admin-delete-hay-table {
+  font-size: calc(5px + 1.6vmin);
+  color: rgba(245, 245, 245, 0.849);
+}
+
 .admin-button-container {
   display: flex;
 }
