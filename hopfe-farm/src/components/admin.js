@@ -9,6 +9,7 @@ const AdminApp = () => {
     
     const [hayData, setHayData] = useState([]);
     const [honeyData, setHoneyData] = useState([]);
+    const [deleteMode, setDeleteMode] = useState(false);
     const [stateToggle, setStateToggle] = useState(true);
 
     const prevHayRef = useRef();
@@ -62,14 +63,12 @@ const AdminApp = () => {
         }
     }, [appContext]);
 
-
+    const deleteModeToggle = () => {
+        deleteMode ? setDeleteMode(false) : setDeleteMode(true);
+    };
 
     const stateToggleFunc = () => {
-        if (stateToggle) {
-            setStateToggle(false);
-        } else {
-            setStateToggle(true);
-        }
+        stateToggle ? setStateToggle(false) : setStateToggle(true);
     };
 
     const hayChangeHandler = (event) => {
@@ -127,7 +126,6 @@ const AdminApp = () => {
         
         const hayLoop = () => {
             let hayChanges = [];
-            // let honeyChanges = [];
             
             let i;
             for (i = 0; i < hayData.length; i++) {
@@ -164,7 +162,15 @@ const AdminApp = () => {
             
             let i;
             for (i = 0; i < honeyData.length; i++) {
-                if (honeyData[i]["HoneyType"] !== resetHoneyData[i]["HoneyType"] || honeyData[i]["HoneySize"] !== resetHoneyData[i]["HoneySize"] || honeyData[i]["Quantity"] !== resetHoneyData[i]["Quantity"] || honeyData[i]["Price"] !== resetHoneyData[i]["Price"]) {
+                if (honeyData[i]["HoneyType"] === "") {
+                    console.log("HoneyType can not be left blank.")
+                } else if (isNaN(honeyData[i]["HoneySize"]) || honeyData[i]["HoneySize"] <= 0) {
+                    console.log("HoneySize must be a number greater than 0.")
+                } else if (isNaN(honeyData[i]["Quantity"]) || honeyData[i]["Quantity"] < 0) {
+                    console.log("Quantity must be a number greater than or equal to 0.")
+                } else if (isNaN(honeyData[i]["Price"]) || honeyData[i]["Price"] < 0) {
+                    console.log("Price must be a number greater than or equal to 0.")
+                } else if (honeyData[i]["HoneyType"] !== resetHoneyData[i]["HoneyType"] || honeyData[i]["HoneySize"] !== resetHoneyData[i]["HoneySize"] || honeyData[i]["Quantity"] !== resetHoneyData[i]["Quantity"] || honeyData[i]["Price"] !== resetHoneyData[i]["Price"]) {
                     honeyChanges.push({honeyRow: i, rowData: honeyData[i]});
                 } else {
                     console.log(honeyData[i])
@@ -183,26 +189,40 @@ const AdminApp = () => {
         // }
     };
 
-    const cancelChanges = () => {
-        const resetHay = async () => {
-            const response = await fetch(`${appContext.apiUrl}haylist`);
-            const { hay } = await response.json();
-            setHayData(hay);
-            prevHayRef.current = hay;
-        }
-
-        const resetHoney = async () => {
-            const response = await fetch(`${appContext.apiUrl}honeylist`);
-            const { honey } = await response.json();
-            setHoneyData(honey);
-            prevHoneyRef.current = honey;
-        }
-
-        resetHay();
-        resetHoney();
+    const resetHay = async () => {
+        const response = await fetch(`${appContext.apiUrl}haylist`);
+        const { hay } = await response.json();
+        setHayData(hay);
+        prevHayRef.current = hay;
     }
 
-    const createHayTr = hayData.map((tr, i) => {
+    const resetHoney = async () => {
+        const response = await fetch(`${appContext.apiUrl}honeylist`);
+        const { honey } = await response.json();
+        setHoneyData(honey);
+        prevHoneyRef.current = honey;
+    }
+    
+    const cancelChanges = () => {
+        resetHay();
+        resetHoney();
+    };
+
+    const deleteHayRow = async (event) => {
+        const rowIndex = event.target.name;
+        const dbRowId = hayData[rowIndex].id;
+        const response = await fetch(`${appContext.apiUrl}hay/${dbRowId}`, {
+            method: "DELETE", 
+            headers: {
+                "Authorization": `Bearer ${appContext.token}`
+            },
+        });
+        const message = await response.json();
+        console.log(message);
+        resetHay();
+    }
+
+    const editHayTable = hayData.map((tr, i) => {
         return (
             <Tr key={`${i}row`} className="tr">
                 <Td><input value={tr.HayType} name={i} key={`${i}0`} className="HayType" onChange={(event) => hayChangeHandler(event)}></input></Td>
@@ -212,8 +232,20 @@ const AdminApp = () => {
             </Tr>
         )
     });
+
+    const deleteHayTable = hayData.map((tr, i) => {
+        return (
+            <Tr key={`${i}row`} className="tr">
+                <Td key={`${i}0`}>{tr.HayType}</Td>
+                <Td key={`${i}1`}>{tr.BaleQuality}</Td>
+                <Td key={`${i}2`}>{tr.Quantity}</Td>
+                <Td key={`${i}3`}>{"$ "+(tr.Price).toFixed(2)}</Td>
+                <Td key={`${i}4`}><button name={i} onClick={(event) => deleteHayRow(event)}>Delete</button></Td>
+            </Tr>
+        )
+    })
     
-    const createHoneyTr = honeyData.map((tr, i) => {
+    const editHoneyTable = honeyData.map((tr, i) => {
         return (
             <Tr key={`${i}row`} className="tr">
                 <Td className="honey-type-td"><input value={tr.HoneyType} name={i} key={`${i}0`} className="HoneyType" onChange={(event) => honeyChangeHandler(event)}></input></Td>
@@ -241,6 +273,15 @@ const AdminApp = () => {
 
     return (
         <div className="admin-app">
+            <div className="delete-mode-toggle-button">
+                {deleteMode 
+                    ? <button onClick={deleteModeToggle}>Enter Edit Mode</button> 
+                    : <button onClick={deleteModeToggle}>Enter Delete Mode</button>
+                }
+            </div>
+            <div className="delete-mode-warning">
+                {deleteMode ? null : "Any unsaved changes will be cancelled when entering delete mode."}
+            </div>
             <h1 className="admin-hay-header">Hay Table</h1>
             <Table>
                 <Thead>
@@ -251,12 +292,12 @@ const AdminApp = () => {
                         <Th className="hay-table-header">{appContext.hayHeader[3]}</Th>
                     </Tr>
                 </Thead>
-                <Tbody>
-                    {createHayTr}
+                <Tbody className={deleteMode ? "admin-delete-hay-table" : "admin-edit-hay-table"}>
+                    {deleteMode ? deleteHayTable : editHayTable}
                 </Tbody>
             </Table>
             <div>
-                <button onClick={addHayRow}>Add Hay Row</button>
+                {deleteMode ? null : <button onClick={addHayRow}>Add Hay Row</button>}
             </div>
             <h2 className="admin-honey-header">Honey Table</h2>
             <Table>
@@ -269,15 +310,15 @@ const AdminApp = () => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                   {createHoneyTr}
+                   {editHoneyTable}
                 </Tbody>
             </Table>
             <div>
-                <button onClick={addHoneyRow}>Add Honey Row</button>
+                {deleteMode ? null : <button onClick={addHoneyRow}>Add Honey Row</button>}
             </div>
             <div className="admin-buttons-container">
-                <button className="save-changes-button" onClick={saveChanges}>Save Changes</button>
-                <button className="cancel-changes-button" onClick={cancelChanges}>Cancel Changes</button>
+                {deleteMode ? null : <button className="save-changes-button" onClick={saveChanges}>Save Changes</button>}
+                {deleteMode ? null : <button className="cancel-changes-button" onClick={cancelChanges}>Cancel Changes</button>}
             </div>
         </div>
     )
