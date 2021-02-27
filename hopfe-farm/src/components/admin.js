@@ -134,12 +134,8 @@ const AdminApp = () => {
                         if (hayData[i]["BaleQuality"] === "No Rain" || hayData[i]["BaleQuality"] === "Some Rain" || hayData[i]["BaleQuality"] === "Heavy Rain") {
                             hayChanges.push({hayRow: i, rowData: hayData[i]});
                         } else {
-                            console.log(hayData[i]["BaleQuality"])
                             console.log("BaleQuality must be No Rain, Some Rain, or Heavy Rain")
                         }
-                    } else {
-                        console.log(hayData[i])
-                        console.log(resetHayData[i])
                     }
                 } else {
                     if (hayData[i]["HayType"] !== "") {
