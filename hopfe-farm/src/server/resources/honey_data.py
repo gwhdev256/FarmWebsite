@@ -64,7 +64,13 @@ class CreateHoneyData(Resource):
                 return {'message': 'Honey entry updated successfully.'}, 200
             else:
                 return {'message': 'Please provide NewHoneyType and NewHoneySize in body.'}, 400
-        return {'message': "Original honey entry not found. Cannot be updated."}, 404
+        else:
+            if HoneyDataModel.find_by_honey_type_and_honey_size(data['NewHoneyType'], data['NewHoneySize']):
+                return {'message': "An entry with a honey type of '{}' and honey size of '{}' already exists.".format(data['NewHoneyType'], data['NewHoneySize'])}, 404
+            else:
+                honey_data = HoneyDataModel(data['HoneyType'], data['HoneySize'], data['Quantity'], data['Price'])
+                honey_data.save_to_db()
+                return {'message': 'Honey data created successfully.'}, 201
 
 
 class HoneyData(Resource):
