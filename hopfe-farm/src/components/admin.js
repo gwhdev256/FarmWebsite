@@ -150,7 +150,19 @@ const AdminApp = () => {
                     }
                 }
             }
-            console.log(hayChanges)     
+            const fetchPut = (change) => {
+                console.log(change);
+                // const response = await fetch(`${appContext.apiUrl}createHay`, {
+                    //     method: 'PUT',
+                    //     headers: {
+                        //         'Authorization': `Bearer ${appContext.token}`
+                        //     },
+                        //     body: {
+                            //         "HayType": 
+                            //     }
+                            // })                           
+            }
+            hayChanges.forEach(fetchPut);
         }
 
         const honeyLoop = () => {
@@ -235,7 +247,7 @@ const AdminApp = () => {
                 <Td key={`${i}0`}>{tr.HayType}</Td>
                 <Td key={`${i}1`}>{tr.BaleQuality}</Td>
                 <Td key={`${i}2`}>{tr.Quantity}</Td>
-                <Td key={`${i}3`}>{"$ "+(tr.Price).toFixed(2)}</Td>
+                <Td key={`${i}3`}>{tr.Price}</Td>
                 <Td key={`${i}4`}><button name={i} onClick={(event) => deleteHayRow(event)}>Delete</button></Td>
             </Tr>
         )
