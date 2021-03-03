@@ -44,7 +44,7 @@ class CreateHayData(Resource):
         try:
             new_data.save_to_db()
         except:
-            return {"message": "An error occurred while inserting the item."}, 500
+            return {"message": "An error occurred while inserting the hay entry."}, 500
 
         return {'message': 'Data added successfully.'}, 201
     
@@ -56,15 +56,25 @@ class CreateHayData(Resource):
 
         if hay_data:
             if data['NewHayType'] and data['NewBaleQuality']:
-                hay_data.HayType = data['NewHayType']
-                hay_data.BaleQuality = data['NewBaleQuality']
-                hay_data.Quantity = data['Quantity']
-                hay_data.Price = data['Price']
-                hay_data.save_to_db()
-                return {'message': 'Hay entry updated successfully.'}, 200
+                try:
+                    hay_data.HayType = data['NewHayType']
+                    hay_data.BaleQuality = data['NewBaleQuality']
+                    hay_data.Quantity = data['Quantity']
+                    hay_data.Price = data['Price']
+                    hay_data.save_to_db()
+                    return {'message': 'Hay entry updated successfully.'}, 200
+                except:
+                    return {'message': 'An error occured while inserting the hay entry.'}, 500
             else:
                 return {'message': 'Please provide NewHayType and NewBaleQuality in body.'}, 400
-        return {'message': "Original hay entry not found. Cannot be updated."}, 404
+        else:
+            if HayDataModel.find_by_hay_type_and_bale_quality(data['NewHayType'], data['NewBaleQuality']):
+                return {'message': "An entry with a hay type of '{}'and bale quality of '{}' already exists.".format(data['NewHayType'], data['NewBaleQuality'])}, 404
+            else:
+                hay_data = HayDataModel(data['NewHayType'], data['NewBaleQuality'], data['Quantity'], data['Price'])
+                hay_data.save_to_db()
+                return{'message': 'Hay data created successfully.'}, 201
+
 
 class HayData(Resource):
     def get(self, _id):
