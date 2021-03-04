@@ -22,7 +22,7 @@ const Honey = () => {
             availability = "Available";
         }
         return (
-            <Tr key={`${tr.HoneyType}_${tr.HoneySize}`} className="tr">
+            <Tr key={`${tr.HoneyType}_${tr.HoneySize}`} className="honey-tr">
                 <Td key={`${tr.HoneyType}_${tr.HoneySize}`+1} className="honey-type-td">{tr.HoneyType}</Td>
                 <Td key={`${tr.HoneyType}_${tr.HoneySize}`+2} className="honey-td">{tr.HoneySize}</Td>
                 <Td key={`${tr.HoneyType}_${tr.HoneySize}`+3} className="honey-td">{availability}</Td>
