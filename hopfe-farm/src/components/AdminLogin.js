@@ -20,7 +20,6 @@ const AdminLogin = (props) => {
 
     const handleSubmit = async() => {
         let res = await fetchFunc(`${appContext.apiUrl}/login`, 'POST', {"username": `${username}`, "password": `${password}`})
-        console.log(res)
         setUsername("");
         setPassword("");
         if (res['access_token']) {
