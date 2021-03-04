@@ -125,7 +125,7 @@ const AdminApp = () => {
                 if (resetHayData[i]) {
                     if (hayData[i]["HayType"] !== resetHayData[i]["HayType"] || hayData[i]["BaleQuality"] !== resetHayData[i]["BaleQuality"] || hayData[i]["Quantity"] !== resetHayData[i]["Quantity"] || hayData[i]["Price"] !== resetHayData[i]["Price"]) {
                         if (hayData[i]["BaleQuality"] === "No Rain" || hayData[i]["BaleQuality"] === "Some Rain" || hayData[i]["BaleQuality"] === "Heavy Rain") {
-                            hayChanges.push(hayData[i]);
+                            hayChanges.push({"HayType": resetHayData[i]["HayType"], "BaleQuality": resetHayData[i]["BaleQuality"], "Quantity": hayData[i]["Quantity"], "Price": hayData[i]["Price"], "NewHayType": hayData[i]["HayType"], "NewBaleQuality": hayData[i]["BaleQuality"]});
                         } else {
                             console.log("BaleQuality must be No Rain, Some Rain, or Heavy Rain")
                         }
@@ -144,17 +144,20 @@ const AdminApp = () => {
             }
 
             const hayFetchPut = async (change) => {
-                const response = await fetch(`${appContext.apiUrl}createHay`, {
+                const response = await fetch(`${appContext.apiUrl}createhay`, {
                     method: 'PUT',
                     headers: {
-                            'Authorization': `Bearer ${appContext.token}`
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${appContext.token}`
                     },
                     body: JSON.stringify(change)
                 });
                 console.log(response.json())                              
             }
             
-            hayChanges.forEach(hayFetchPut);
+            if (hayChanges !== []) {
+                hayChanges.forEach(hayFetchPut);
+            }
         }
 
         const honeyLoop = () => {
@@ -172,7 +175,7 @@ const AdminApp = () => {
                     console.log("Price must be a number greater than or equal to 0.")
                 } else if (resetHoneyData[i]) {
                     if (honeyData[i]["HoneyType"] !== resetHoneyData[i]["HoneyType"] || honeyData[i]["HoneySize"] !== resetHoneyData[i]["HoneySize"] || honeyData[i]["Quantity"] !== resetHoneyData[i]["Quantity"] || honeyData[i]["Price"] !== resetHoneyData[i]["Price"]) {
-                        honeyChanges.push({honeyRow: i, rowData: honeyData[i]});
+                        honeyChanges.push({"HoneyType": resetHoneyData[i]["HoneyType"], "HoneySize": resetHoneyData[i]["HoneySize"], "Quantity": honeyData[i]["Quantity"], "Price": honeyData[i]["Price"], "NewHoneyType": honeyData[i]["HoneyType"], "NewHoneySize": honeyData[i]["HoneySize"]});
                     }
                 } else {
                     honeyChanges.push(honeyData[i]);
@@ -180,10 +183,11 @@ const AdminApp = () => {
             }
 
             const honeyFetchPut = async (change) => {
-                const response = await fetch(`${appContext.apiUrl}createHoney`, {
+                const response = await fetch(`${appContext.apiUrl}createhoney`, {
                     method: 'PUT',
                     headers: {
-                        'Authorization': `Bearer ${appContext.token}`
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${appContext.token}`
                     },
                     body: JSON.stringify(change)
                 });
@@ -254,8 +258,8 @@ const AdminApp = () => {
             <Tr key={`${i}row`} className="tr">
                 <Td><input value={tr.HayType} name={i} key={`${i}0`} className="HayType" onChange={(event) => hayChangeHandler(event)}></input></Td>
                 <Td><input value={tr.BaleQuality} name={i} key={`${i}1`} className="BaleQuality" onChange={(event) => hayChangeHandler(event)}></input></Td>
-                <Td><input value={tr.Quantity} name={i} key={`${i}2`} className="Quantity" onChange={(event) => hayChangeHandler(event)}></input></Td>
-                <Td><input value={tr.Price} name={i} key={`${i}3`} className="Price" onChange={(event) => hayChangeHandler(event)}></input></Td>
+                <Td><input type="number" value={tr.Quantity} name={i} key={`${i}2`} className="Quantity" onChange={(event) => hayChangeHandler(event)}></input></Td>
+                <Td><input type="number" value={Number(tr.Price)} name={i} key={`${i}3`} className="Price" onChange={(event) => hayChangeHandler(event)}></input></Td>
             </Tr>
         )
     });
