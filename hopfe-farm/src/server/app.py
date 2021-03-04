@@ -10,20 +10,23 @@ from resources.honey_data import CreateHoneyData, HoneyData, HoneyList
 from resources.hay_data import CreateHayData, HayData, HayList
 
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['CORS_SUPPORTS_CREDENTIALS'] = True
 
 app.secret_key = 'development'
 
 api = Api(app)
-CORS(app)
 
 @app.before_first_request
 def create_tables():
     db.create_all()
 
 jwt = JWTManager(app)
+
+CORS(app)
 
 api.add_resource(UserRegister, '/register')
 api.add_resource(User, '/user')
