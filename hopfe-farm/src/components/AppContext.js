@@ -26,7 +26,7 @@ export const ContextProvider = (props) => {
 
     const honeyTrLoader = async () => {
         const response = await fetch(`${apiUrl}honeylist`);
-        const { honey } = response.json()
+        const { honey } = await response.json()
         setHoneyTr(honey);
     };
 
