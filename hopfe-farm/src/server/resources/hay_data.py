@@ -71,8 +71,8 @@ class CreateHayData(Resource):
             if HayDataModel.find_by_hay_type_and_bale_quality(data['NewHayType'], data['NewBaleQuality']):
                 return {'message': "An entry with a hay type of '{}'and bale quality of '{}' already exists.".format(data['NewHayType'], data['NewBaleQuality'])}, 404
             else:
-                hay_data = HayDataModel(data['NewHayType'], data['NewBaleQuality'], data['Quantity'], data['Price'])
-                hay_data.save_to_db()
+                new_hay_data = HayDataModel(data['HayType'], data['BaleQuality'], data['Quantity'], data['Price'])
+                new_hay_data.save_to_db()
                 return{'message': 'Hay data created successfully.'}, 201
 
 
