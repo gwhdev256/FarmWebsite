@@ -211,14 +211,14 @@ const AdminApp = () => {
         const { hay } = await response.json();
         setHayData(hay);
         prevHayRef.current = hay;
-    }
+    };
 
     const resetHoney = async () => {
         const response = await fetch(`${appContext.apiUrl}honeylist`);
         const { honey } = await response.json();
         setHoneyData(honey);
         prevHoneyRef.current = honey;
-    }
+    };
     
     const cancelChanges = () => {
         resetHay();
@@ -297,21 +297,21 @@ const AdminApp = () => {
                 <Td key={`${i}4`}><button name={i} onClick={(event) => deleteHoneyRow(event)}>Delete</button></Td>
             </Tr>
         )
-    })
+    });
 
     const addHayRow = () => {
         const newHayRow = {"HayType": "", "BaleQuality": "", "Quantity": 0, "Price": 0};
         const newHayData = [...prevHayRef.current, newHayRow];
         setHayData(newHayData);
         prevHayRef.current = newHayData;
-    }
+    };
 
     const addHoneyRow = () => {
         const newHoneyRow = {"HoneyType": "", "HoneySize": "", "Quantity": 0, "Price": 0};
         const newHoneyData = [...prevHoneyRef.current, newHoneyRow];
         setHoneyData(newHoneyData);
         prevHoneyRef.current = newHoneyData;
-    }
+    };
 
 
     return (
