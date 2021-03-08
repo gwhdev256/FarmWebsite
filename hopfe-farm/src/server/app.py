@@ -5,7 +5,7 @@ from flask_cors import CORS
 from db import db
 
 from resources.users import UserRegister, User, UserLogin
-from resources.contact_data import ContactData, CreateContactData
+from resources.contact_data import ContactData, CreateContactData, ContactList
 from resources.honey_data import CreateHoneyData, HoneyData, HoneyList
 from resources.hay_data import CreateHayData, HayData, HayList
 
@@ -33,6 +33,7 @@ api.add_resource(User, '/user')
 api.add_resource(UserLogin, '/login')
 api.add_resource(CreateContactData, '/createcontact')
 api.add_resource(ContactData, '/contact/<int:_id>')
+api.add_resource(ContactList, '/contactlist')
 api.add_resource(CreateHoneyData, '/createhoney')
 api.add_resource(HoneyData, '/honey/<int:_id>')
 api.add_resource(HoneyList, '/honeylist')

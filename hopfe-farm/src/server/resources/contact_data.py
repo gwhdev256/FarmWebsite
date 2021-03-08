@@ -48,4 +48,9 @@ class ContactData(Resource):
             contact_data.delete_from_db()
             return {"message": "Contact data deleted successfully."}, 200
         return {"message": "Contact data not found."}, 404
+
+class ContactList(Resource):
+    def get(self):
+        contact_categories = [contact.json() for contact in ContactDataModel.find_all()]
+        return {'contact_info': contact_categories}, 200
         
