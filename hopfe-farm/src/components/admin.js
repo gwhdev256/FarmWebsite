@@ -77,7 +77,7 @@ const AdminApp = () => {
         let currentField = event.target.className;
 
         if (currentField === ("Quantity" || "Price")) {
-            currentData[currentRow][currentField] = Number(event.target.value);
+            currentData[currentRow][currentField] = event.target.value;
         } else {
             currentData[currentRow][currentField] = String(event.target.value);
         }
@@ -93,7 +93,7 @@ const AdminApp = () => {
         if (currentField === ("HoneyType")) {
             currentData[currentRow][currentField] = String(event.target.value);
         } else {
-            currentData[currentRow][currentField] = Number(event.target.value);
+            currentData[currentRow][currentField] = event.target.value;
         }
         setHoneyData(currentData);
         stateToggleFunc();
@@ -258,8 +258,8 @@ const AdminApp = () => {
             <Tr key={`${i}row`} className="tr">
                 <Td><input value={tr.HayType} name={i} key={`${i}0`} className="HayType" onChange={(event) => hayChangeHandler(event)}></input></Td>
                 <Td><input value={tr.BaleQuality} name={i} key={`${i}1`} className="BaleQuality" onChange={(event) => hayChangeHandler(event)}></input></Td>
-                <Td><input type="number" value={tr.Quantity} name={i} key={`${i}2`} className="Quantity" onChange={(event) => hayChangeHandler(event)}></input></Td>
-                <Td><input type="number" value={Number(tr.Price)} name={i} key={`${i}3`} className="Price" onChange={(event) => hayChangeHandler(event)}></input></Td>
+                <Td><input value={tr.Quantity} name={i} key={`${i}2`} className="Quantity" onChange={(event) => hayChangeHandler(event)}></input></Td>
+                <Td><input value={tr.Price} name={i} key={`${i}3`} className="Price" onChange={(event) => hayChangeHandler(event)}></input></Td>
             </Tr>
         )
     });
@@ -289,12 +289,12 @@ const AdminApp = () => {
 
     const deleteHoneyTable = honeyData.map((tr, i) => {
         return (
-            <Tr key={`${i}row`} className="tr">
-                <Td key={`${i}0`}>{tr.HoneyType}</Td>
-                <Td key={`${i}1`}>{tr.HoneySize}</Td>
-                <Td key={`${i}2`}>{tr.Quantity}</Td>
-                <Td key={`${i}3`}>{tr.Price}</Td>
-                <Td key={`${i}4`}><button name={i} onClick={(event) => deleteHoneyRow(event)}>Delete</button></Td>
+            <Tr key={`${i}row`} className="honey-tr">
+                <Td className="honey-type-td" key={`${i}0`}>{tr.HoneyType}</Td>
+                <Td className="honey-td" key={`${i}1`}>{tr.HoneySize}</Td>
+                <Td className="honey-td" key={`${i}2`}>{tr.Quantity}</Td>
+                <Td className="honey-td" key={`${i}3`}>{tr.Price}</Td>
+                <Td className="honey-td" key={`${i}4`}><button name={i} onClick={(event) => deleteHoneyRow(event)}>Delete</button></Td>
             </Tr>
         )
     });
