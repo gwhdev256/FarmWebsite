@@ -26,8 +26,14 @@ export const ContextProvider = (props) => {
 
     const honeyTrLoader = async () => {
         const response = await fetch(`${apiUrl}honeylist`);
-        const { honey } = await response.json()
+        const { honey } = await response.json();
         setHoneyTr(honey);
+    };
+
+    const contactInfoLoader = async () => {
+        const response = await fetch(`${apiUrl}contactList`);
+        const { contacts } = await response.json();
+        setContactInfo(contacts);
     };
 
     
@@ -55,7 +61,8 @@ export const ContextProvider = (props) => {
             token,
             setToken,
             hayTrLoader,
-            honeyTrLoader
+            honeyTrLoader,
+            contactInfoLoader
         }}>
             {props.children}
         </AppContext.Provider>
