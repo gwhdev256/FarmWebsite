@@ -4,13 +4,24 @@ class ContactDataModel(db.Model):
     __tablename__ = "Contacts"
 
     id = db.Column(db.Integer, primary_key=True)
-    stored_string = db.Column(db.String(500), unique = True, nullable = False)
+    contact_name = db.Column(db.String(500), unique = True, nullable = False)
+    job_title = db.Column(db.String(500), nullable = False)
+    phone_number = db.Column(db.String(20))
+    email = db.Column(db.String(30))
 
-    def __init__(self, stored_string):
-        self.stored_string = stored_string
+    def __init__(self, contact_name, job_title, phone_number, email):
+        self.contact_name = contact_name
+        self.job_title = job_title
+        self.phone_number = phone_number
+        self.email = email
 
     def json(self):
-        return {'stored_string': self.stored_string}
+        return {
+                'contact_name': self.contact_name, 
+                'job_title': self.job_title,
+                'phone_number': self.phone_number,
+                'email': self.email
+            }
 
     def save_to_db(self):
         db.session.add(self)

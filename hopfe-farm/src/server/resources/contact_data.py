@@ -6,10 +6,21 @@ from models.contact_data import ContactDataModel
 
 class CreateContactData(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('stored_string',
+    parser.add_argument('contact_name',
         type=str,
         required=True,
-        help="Body must contain table_name"
+        help="Body must contain contact_name"
+    )
+    parser.add_argument('job_title',
+        type=str,
+        required=True,
+        help="Body must contain job_title"
+    )
+    parser.add_argument('phone_number',
+        type=str
+    )
+    parser.add_argument('email',
+        type=str
     )
     parser.add_argument('_id',
         type=int
