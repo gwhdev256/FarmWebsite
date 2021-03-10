@@ -6,8 +6,12 @@ const Contact = () => {
     const appContext = React.useContext(AppContext);
 
     useEffect(() => {
-        appContext.setSelectedIcon("contact");
-    });
+        const initialLoad = () => {
+            appContext.setSelectedIcon("contact");
+            appContext.contactInfoLoader();
+        }
+        initialLoad();
+    }, [appContext]);
 
     return (
         <div className="contact-info">
