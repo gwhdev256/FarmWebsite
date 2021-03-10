@@ -94,7 +94,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-size: calc(5px + 1.6vmin);
+  font-size: calc(10px + 1.5vmin);
   color: rgba(255, 255, 255, 0.623);
   height: 100%;
   padding: 0vh 0vh 5vh 0vh;
@@ -133,20 +133,20 @@
 
 .honey-table-header {
   color: rgb(216, 137, 19);
-  font-size: calc(5px + 3vmin);
+  font-size: calc(10px + 2vmin);
 }
 
 .honey-contact {
   margin: 2vmin;
-  font-size: calc(5px + 2vmin);
+  font-size: calc(10px + 1.5vmin);
 }
 
 .honey-type-td {
-  font-size: calc(5px + 2vmin);
+  font-size: calc(10px + 1.5vmin);
 }
 
 .honey-td {
-  font-size: calc(5px + 3vmin);
+  font-size: calc(10px + 1.5vmin);
 }
 
 .admin-hay-header,
