@@ -6,20 +6,20 @@ from models.contact_data import ContactDataModel
 
 class CreateContactData(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('contact_name',
+    parser.add_argument('ContactName',
         type=str,
         required=True,
-        help="Body must contain contact_name"
+        help="Body must contain ContactName"
     )
-    parser.add_argument('job_title',
+    parser.add_argument('JobTitle',
         type=str,
         required=True,
-        help="Body must contain job_title"
+        help="Body must contain JobTitle"
     )
-    parser.add_argument('phone_number',
+    parser.add_argument('PhoneNumber',
         type=str
     )
-    parser.add_argument('email',
+    parser.add_argument('Email',
         type=str
     )
     parser.add_argument('_id',
@@ -30,14 +30,11 @@ class CreateContactData(Resource):
     def post(self):
         data = CreateContactData.parser.parse_args()
 
-        if ContactDataModel.find_by_id(data["_id"]):
-            return {"message": "Contact data with that id already exists."}, 404
-
-        contact_data = ContactDataModel(data["stored_string"])
+        contact_data = ContactDataModel(data["ContactName"], data["JobTitle"], data["PhoneNumber"], data["Email"])
 
         try:
             contact_data.save_to_db()
-            return {"message": "Table '{}' created successfully.".format(data['table_name'])}, 201
+            return {"message": "Contact data added successfully"}, 201
         except:
             return {"message": "Something went wrong."}, 500
 
@@ -63,5 +60,7 @@ class ContactData(Resource):
 class ContactList(Resource):
     def get(self):
         contact_categories = [contact.json() for contact in ContactDataModel.find_all()]
-        return {'contact_info': contact_categories}, 200
+        if (contact_categories):
+            return {'contact_info': contact_categories}, 200
+        return{"message": "Contact data not found."}, 404
         
