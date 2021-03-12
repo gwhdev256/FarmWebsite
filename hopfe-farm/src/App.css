@@ -224,6 +224,37 @@
   margin: 1vw;
 }
 
+.contact-container {
+  display:flex;
+  flex-direction: column;  
+}
+
+.contact-name,
+.contact-title,
+.contact-number,
+.contact-email {
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-name{
+  font-size: calc(10px + 3vmin);
+  color:whitesmoke;
+  margin-top: calc(5px + 2vmin);;
+}
+
+.contact-title,
+.contact-number,
+.contact-email {
+  font-size: calc(10px + 2vmin);
+  color:rgba(255, 255, 255, 0.623);
+}
+
+.contact-email {
+  margin-bottom: calc(5px + 2vmin);
+}
+
 @media only screen and (min-width: 640px) {
   .tr,
   .honey-tr {
