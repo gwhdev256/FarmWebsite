@@ -13,8 +13,15 @@ const Contact = () => {
         initialLoad();
     }, [appContext]);
 
-    const createContacts = appContext.contactInfo.map(() => {
-        //maybe forEach loop? extract all contact data and display it
+    const createContacts = appContext.contactInfo.map((contact) => {
+        return (
+            <div className="contact-container">
+                <div className="contact-name">{contact.ContactName}</div>
+                <div className="contact-title">{contact.JobTitle}</div>
+                <div className="contact-number">{contact.PhoneNumber}</div>
+                <div className="contact-email">{contact.Email}</div>
+            </div>
+        )
     })
 
     return (
