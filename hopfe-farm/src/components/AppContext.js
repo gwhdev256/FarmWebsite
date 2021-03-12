@@ -31,9 +31,9 @@ export const ContextProvider = (props) => {
     };
 
     const contactInfoLoader = async () => {
-        const response = await fetch(`${apiUrl}contactList`);
-        const { contacts } = await response.json();
-        setContactInfo(contacts);
+        const response = await fetch(`${apiUrl}contactlist`);
+        const { contact_info } = await response.json();
+        setContactInfo(contact_info);
     };
 
     
