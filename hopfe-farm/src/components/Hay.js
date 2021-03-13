@@ -1,19 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../App.css';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import { AppContext } from './AppContext.js';
+import { Ellipsis } from 'react-spinners-css';
 
 const Hay = () => {
     const appContext = React.useContext(AppContext);
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
         const initialLoad = async () => {
             await appContext.setSelectedIcon("hay");
             await appContext.hayTrLoader();
+            setLoaded(true);
         }
         initialLoad();
-    }, [appContext]);
+        // eslint-disable-next-line
+    }, []);
 
     const createTr = appContext.hayTr.map((tr) => {
         let availability;
@@ -39,19 +43,22 @@ const Hay = () => {
             <h2 className="hay-description">All Hay is a Mix of Alfalfa, Brohm, Timothy and Orchard Grass available in 1400 lb Round Bales</h2>
             <span className="hay-contact">Please contact Garth Hopfe for hay orders.</span>
             <span className="hay-disclaimer">Hay prices are subject to change and do not include delivery fees.</span>
-            <Table>
-                <Thead>
-                    <Tr>
-                        <Th className="hay-table-header">{appContext.hayHeader[0]}</Th>
-                        <Th className="hay-table-header">{appContext.hayHeader[1]}</Th>
-                        <Th className="hay-table-header">{appContext.hayHeader[2]}</Th>
-                        <Th className="hay-table-header">{appContext.hayHeader[3]}</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    {createTr}
-                </Tbody>
-            </Table>
+            { loaded 
+                ?   <Table>
+                        <Thead>
+                            <Tr>
+                                <Th className="hay-table-header">{appContext.hayHeader[0]}</Th>
+                                <Th className="hay-table-header">{appContext.hayHeader[1]}</Th>
+                                <Th className="hay-table-header">{appContext.hayHeader[2]}</Th>
+                                <Th className="hay-table-header">{appContext.hayHeader[3]}</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {createTr}
+                        </Tbody>
+                    </Table>
+                : <div className="spinner"><Ellipsis color="whitesmoke"/></div>
+            }
         </div>
     )
 }
