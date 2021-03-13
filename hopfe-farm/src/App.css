@@ -133,7 +133,7 @@
 
 .honey-table-header {
   color: rgb(216, 137, 19);
-  font-size: calc(10px + 2vmin);
+  font-size: calc(5px + 3vmin);
 }
 
 .honey-contact {
@@ -143,6 +143,7 @@
 
 .honey-type-td {
   font-size: calc(10px + 1.5vmin);
+  padding: 0;
 }
 
 .honey-td {
@@ -253,6 +254,12 @@
 
 .contact-email {
   margin-bottom: calc(5px + 2vmin);
+}
+
+.spinner {
+  display: flex;
+  width: 100vw;
+  justify-content: center;
 }
 
 @media only screen and (min-width: 640px) {
