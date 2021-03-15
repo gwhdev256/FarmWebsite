@@ -11,16 +11,26 @@ const Honey = () => {
     
     const [loaded, setLoaded] = useState(false);
 
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         const initialLoad = async () => {
+    //             await appContext.setSelectedIcon("honey");
+    //             await appContext.honeyTrLoader();
+    //             setLoaded(true);
+    //         }
+    //         initialLoad();
+    //     }, 2000);
+    //     return () => clearTimeout(timer);
+    //     // eslint-disable-next-line
+    // }, []);
+
     useEffect(() => {
-        const timer = setTimeout(() => {
-            const initialLoad = async () => {
-                await appContext.setSelectedIcon("honey");
-                await appContext.honeyTrLoader();
-                setLoaded(true);
-            }
-            initialLoad();
-        }, 2000);
-        return () => clearTimeout(timer);
+        const initialLoad = async () => {
+            await appContext.setSelectedIcon("honey");
+            await appContext.honeyTrLoader();
+            setLoaded(true);
+        }
+        initialLoad();
         // eslint-disable-next-line
     }, []);
 
