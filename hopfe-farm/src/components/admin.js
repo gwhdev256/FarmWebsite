@@ -3,6 +3,7 @@ import '../App.css';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import { AppContext } from './AppContext.js';
+import { Ellipsis } from 'react-spinners-css';
 
 const AdminApp = () => {
     const appContext = React.useContext(AppContext);
@@ -11,6 +12,7 @@ const AdminApp = () => {
     const [honeyData, setHoneyData] = useState([]);
     const [deleteMode, setDeleteMode] = useState(false);
     const [stateToggle, setStateToggle] = useState(true);
+    const [loaded, setLoaded] = useState(false);
 
     const prevHayRef = useRef();
     const prevHoneyRef = useRef();
@@ -24,38 +26,41 @@ const AdminApp = () => {
         
         const initialLoad = async() => {    
             await appContext.setSelectedIcon("admin");
-            const hayLoader = async () => {
-                try {
-                    const response = await fetch(`${appContext.apiUrl}haylist`, {signal});
-                    const { hay } = await response.json();
-                    setHayData(hay);
-                    prevHayRef.current = hay;
-                    resetHayRef.current = hay;
-                } catch(err) {
-                    if (err.name === 'AbortError') {
-                        return "Fetch aborted";
-                    } else {
-                        console.error('Error:', err);
+            await setTimeout(() => {
+                const hayLoader = async () => {
+                    try {
+                        const response = await fetch(`${appContext.apiUrl}haylist`, {signal});
+                        const { hay } = await response.json();
+                        setHayData(hay);
+                        prevHayRef.current = hay;
+                        resetHayRef.current = hay;
+                    } catch(err) {
+                        if (err.name === 'AbortError') {
+                            return "Fetch aborted";
+                        } else {
+                            console.error('Error:', err);
+                        }
                     }
                 }
-            }
-            const honeyLoader = async () => {
-                try {
-                    const response = await fetch(`${appContext.apiUrl}honeylist`, {signal});
-                    const { honey } = await response.json();
-                    setHoneyData(honey);
-                    prevHoneyRef.current = honey;
-                    resetHoneyRef.current = honey;
-                } catch(err) {
-                    if (err.name === 'AbortError') {
-                        return "Fetch aborted";
-                    } else {
-                        console.error('Error:', err);
+                const honeyLoader = async () => {
+                    try {
+                        const response = await fetch(`${appContext.apiUrl}honeylist`, {signal});
+                        const { honey } = await response.json();
+                        setHoneyData(honey);
+                        prevHoneyRef.current = honey;
+                        resetHoneyRef.current = honey;
+                        setLoaded(true);
+                    } catch(err) {
+                        if (err.name === 'AbortError') {
+                            return "Fetch aborted";
+                        } else {
+                            console.error('Error:', err);
+                        }
                     }
                 }
-            }
-            hayLoader();
-            honeyLoader();
+                hayLoader();
+                honeyLoader();
+            }, 3000)
         }
         initialLoad();
         return function cleanup() {
@@ -63,7 +68,25 @@ const AdminApp = () => {
         }
     }, [appContext]);
 
-    const deleteModeToggle = () => {
+    const deleteModeToggle = async () => {
+        try {
+            const response = await fetch(`${appContext.apiUrl}haylist`);
+            const { hay } = await response.json();
+            setHayData(hay);
+            prevHayRef.current = hay;
+            resetHayRef.current = hay;
+        } catch(err) {
+            console.error('Error:', err);
+        }
+        try {
+            const response = await fetch(`${appContext.apiUrl}honeylist`);
+            const { honey } = await response.json();
+            setHoneyData(honey);
+            prevHoneyRef.current = honey;
+            resetHoneyRef.current = honey;
+        } catch(err) {
+            console.error('Error:', err);
+        }
         deleteMode ? setDeleteMode(false) : setDeleteMode(true);
     };
 
@@ -152,7 +175,8 @@ const AdminApp = () => {
                     },
                     body: JSON.stringify(change)
                 });
-                console.log(response.json())                              
+                const message = await response.json();
+                console.log(message)                              
             }
             
             if (hayChanges !== []) {
@@ -326,36 +350,42 @@ const AdminApp = () => {
                 {deleteMode ? null : "Be Advised: Any unsaved changes will be cancelled when entering delete mode."}
             </div>
             <h1 className="admin-hay-header">Hay Table</h1>
-            <Table>
-                <Thead>
-                    <Tr>
-                        <Th className="hay-table-header">{appContext.hayHeader[0]}</Th>
-                        <Th className="hay-table-header">{appContext.hayHeader[1]}</Th>
-                        <Th className="hay-table-header">{appContext.hayHeader[2]}</Th>
-                        <Th className="hay-table-header">{appContext.hayHeader[3]}</Th>
-                    </Tr>
-                </Thead>
-                <Tbody className={deleteMode ? "admin-delete-hay-table" : "admin-edit-hay-table"}>
-                    {deleteMode ? deleteHayTable : editHayTable}
-                </Tbody>
-            </Table>
+            { loaded
+                ?   <Table>
+                        <Thead>
+                            <Tr>
+                                <Th className="hay-table-header">{appContext.hayHeader[0]}</Th>
+                                <Th className="hay-table-header">{appContext.hayHeader[1]}</Th>
+                                <Th className="hay-table-header">{appContext.hayHeader[2]}</Th>
+                                <Th className="hay-table-header">{appContext.hayHeader[3]}</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody className={deleteMode ? "admin-delete-hay-table" : "admin-edit-hay-table"}>
+                            {deleteMode ? deleteHayTable : editHayTable}
+                        </Tbody>
+                    </Table>
+                :   <div className="spinner"><Ellipsis color="whitesmoke"/></div>
+            }
             <div>
                 {deleteMode ? null : <button onClick={addHayRow}>Add Hay Row</button>}
             </div>
             <h2 className="admin-honey-header">Honey Table</h2>
-            <Table>
-                <Thead>
-                    <Tr>
-                        <Th className="honey-table-header">{appContext.honeyHeader[0]}</Th>
-                        <Th className="honey-table-header">{`${appContext.honeyHeader[1]} (ml)`}</Th>
-                        <Th className="honey-table-header">{appContext.honeyHeader[2]}</Th>
-                        <Th className="honey-table-header">{appContext.honeyHeader[3]}</Th>
-                    </Tr>
-                </Thead>
-                <Tbody className={deleteMode ? "admin-delete-honey-table" : "admin-edit-honey-table"}>
-                   {deleteMode ? deleteHoneyTable : editHoneyTable}
-                </Tbody>
-            </Table>
+            { loaded
+                ?   <Table>
+                        <Thead>
+                            <Tr>
+                                <Th className="honey-table-header">{appContext.honeyHeader[0]}</Th>
+                                <Th className="honey-table-header">{`${appContext.honeyHeader[1]} (ml)`}</Th>
+                                <Th className="honey-table-header">{appContext.honeyHeader[2]}</Th>
+                                <Th className="honey-table-header">{appContext.honeyHeader[3]}</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody className={deleteMode ? "admin-delete-honey-table" : "admin-edit-honey-table"}>
+                        {deleteMode ? deleteHoneyTable : editHoneyTable}
+                        </Tbody>
+                    </Table>
+                : <div className="spinner"><Ellipsis color="whitesmoke"/></div>
+            }
             <div>
                 {deleteMode ? null : <button onClick={addHoneyRow}>Add Honey Row</button>}
             </div>
