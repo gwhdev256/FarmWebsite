@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 import { fetchFunc } from './Fetch.js';
 
-const AdminLogin = (props) => {
+const AdminLogin = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState(null);
