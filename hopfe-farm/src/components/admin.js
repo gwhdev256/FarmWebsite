@@ -69,6 +69,7 @@ const AdminApp = () => {
     }, [appContext]);
 
     const deleteModeToggle = async () => {
+        setLoaded(false);
         try {
             const response = await fetch(`${appContext.apiUrl}haylist`);
             const { hay } = await response.json();
@@ -88,6 +89,7 @@ const AdminApp = () => {
             console.error('Error:', err);
         }
         deleteMode ? setDeleteMode(false) : setDeleteMode(true);
+        setLoaded(true);
     };
 
     const stateToggleFunc = () => {
