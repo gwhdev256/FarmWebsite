@@ -343,13 +343,13 @@ const AdminApp = () => {
     return (
         <div className="admin-app">
             <div className="delete-mode-toggle-button">
-                {deleteMode 
+                { deleteMode 
                     ? <button onClick={deleteModeToggle}>Enter Edit Mode</button> 
                     : <button onClick={deleteModeToggle}>Enter Delete Mode</button>
                 }
             </div>
             <div className="delete-mode-warning">
-                {deleteMode ? null : "Be Advised: Any unsaved changes will be cancelled when entering delete mode."}
+                { deleteMode ? null : "Be Advised: Any unsaved changes will be cancelled when entering delete mode." }
             </div>
             <h1 className="admin-hay-header">Hay Table</h1>
             { loaded
@@ -362,14 +362,14 @@ const AdminApp = () => {
                                 <Th className="hay-table-header">{appContext.hayHeader[3]}</Th>
                             </Tr>
                         </Thead>
-                        <Tbody className={deleteMode ? "admin-delete-hay-table" : "admin-edit-hay-table"}>
-                            {deleteMode ? deleteHayTable : editHayTable}
+                        <Tbody className={ deleteMode ? "admin-delete-hay-table" : "admin-edit-hay-table" }>
+                            { deleteMode ? deleteHayTable : editHayTable }
                         </Tbody>
                     </Table>
                 :   <div className="spinner"><Ellipsis color="whitesmoke"/></div>
             }
             <div>
-                {deleteMode ? null : <button onClick={addHayRow}>Add Hay Row</button>}
+                { deleteMode ? null : <button onClick={addHayRow}>Add Hay Row</button> }
             </div>
             <h2 className="admin-honey-header">Honey Table</h2>
             { loaded
@@ -383,17 +383,17 @@ const AdminApp = () => {
                             </Tr>
                         </Thead>
                         <Tbody className={deleteMode ? "admin-delete-honey-table" : "admin-edit-honey-table"}>
-                        {deleteMode ? deleteHoneyTable : editHoneyTable}
+                        { deleteMode ? deleteHoneyTable : editHoneyTable }
                         </Tbody>
                     </Table>
                 : <div className="spinner"><Ellipsis color="whitesmoke"/></div>
             }
             <div>
-                {deleteMode ? null : <button onClick={addHoneyRow}>Add Honey Row</button>}
+                { deleteMode ? null : <button onClick={addHoneyRow}>Add Honey Row</button> }
             </div>
             <div className="admin-buttons-container">
-                {deleteMode ? null : <button className="save-changes-button" onClick={saveChanges}>Save Changes</button>}
-                {deleteMode ? null : <button className="cancel-changes-button" onClick={cancelChanges}>Cancel Changes</button>}
+                { deleteMode ? null : <button className="save-changes-button" onClick={saveChanges}>Save Changes</button> }
+                { deleteMode ? null : <button className="cancel-changes-button" onClick={cancelChanges}>Cancel Changes</button> }
             </div>
         </div>
     )
