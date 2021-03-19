@@ -26,41 +26,39 @@ const AdminApp = () => {
         
         const initialLoad = async() => {    
             await appContext.setSelectedIcon("admin");
-            await setTimeout(() => {
-                const hayLoader = async () => {
-                    try {
-                        const response = await fetch(`${appContext.apiUrl}haylist`, {signal});
-                        const { hay } = await response.json();
-                        setHayData(hay);
-                        prevHayRef.current = hay;
-                        resetHayRef.current = hay;
-                    } catch(err) {
-                        if (err.name === 'AbortError') {
-                            return "Fetch aborted";
-                        } else {
-                            console.error('Error:', err);
-                        }
+            const hayLoader = async () => {
+                try {
+                    const response = await fetch(`${appContext.apiUrl}haylist`, {signal});
+                    const { hay } = await response.json();
+                    setHayData(hay);
+                    prevHayRef.current = hay;
+                    resetHayRef.current = hay;
+                } catch(err) {
+                    if (err.name === 'AbortError') {
+                        return "Fetch aborted";
+                    } else {
+                        console.error('Error:', err);
                     }
                 }
-                const honeyLoader = async () => {
-                    try {
-                        const response = await fetch(`${appContext.apiUrl}honeylist`, {signal});
-                        const { honey } = await response.json();
-                        setHoneyData(honey);
-                        prevHoneyRef.current = honey;
-                        resetHoneyRef.current = honey;
-                        setLoaded(true);
-                    } catch(err) {
-                        if (err.name === 'AbortError') {
-                            return "Fetch aborted";
-                        } else {
-                            console.error('Error:', err);
-                        }
+            }
+            const honeyLoader = async () => {
+                try {
+                    const response = await fetch(`${appContext.apiUrl}honeylist`, {signal});
+                    const { honey } = await response.json();
+                    setHoneyData(honey);
+                    prevHoneyRef.current = honey;
+                    resetHoneyRef.current = honey;
+                    setLoaded(true);
+                } catch(err) {
+                    if (err.name === 'AbortError') {
+                        return "Fetch aborted";
+                    } else {
+                        console.error('Error:', err);
                     }
                 }
-                hayLoader();
-                honeyLoader();
-            }, 3000)
+            }
+            hayLoader();
+            honeyLoader();
         }
         initialLoad();
         return function cleanup() {
@@ -261,7 +259,11 @@ const AdminApp = () => {
             },
         });
         const message = await response.json();
-        console.log(message);
+        if (message.msg === "Token has expired") {
+            appContext.setLoggedIn(false);
+        } else {
+            console.log(message);
+        }
         resetHay();
     };
 
@@ -275,7 +277,11 @@ const AdminApp = () => {
             },
         });
         const message = await response.json();
-        console.log(message);
+        if (message.msg === "Token has expired") {
+            appContext.setLoggedIn(false);
+        } else {
+            console.log(message);
+        }
         resetHoney();
     };
 
