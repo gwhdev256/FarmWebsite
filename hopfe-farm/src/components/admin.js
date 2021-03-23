@@ -260,7 +260,7 @@ const AdminApp = () => {
         });
         const message = await response.json();
         if (message.msg === "Token has expired") {
-            appContext.setLoggedIn(false);
+            return appContext.setLoggedIn(false);
         } else {
             console.log(message);
         }
@@ -278,7 +278,7 @@ const AdminApp = () => {
         });
         const message = await response.json();
         if (message.msg === "Token has expired") {
-            appContext.setLoggedIn(false);
+            return appContext.setLoggedIn(false);
         } else {
             console.log(message);
         }
