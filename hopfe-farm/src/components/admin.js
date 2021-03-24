@@ -13,6 +13,8 @@ const AdminApp = () => {
     const [deleteMode, setDeleteMode] = useState(false);
     const [stateToggle, setStateToggle] = useState(true);
     const [loaded, setLoaded] = useState(false);
+    const [hayErrors, setHayErrors] = useState([]);
+    const [honeyErrors, setHoneyErrors] = useState([]);
 
     const prevHayRef = useRef();
     const prevHoneyRef = useRef();
@@ -142,6 +144,7 @@ const AdminApp = () => {
         
         const hayLoop = () => {
             let hayChanges = [];
+            let hayDataErrors = [];
             
             let i;
             for (i = 0; i < hayData.length; i++) {
@@ -150,7 +153,7 @@ const AdminApp = () => {
                         if (hayData[i]["BaleQuality"] === "No Rain" || hayData[i]["BaleQuality"] === "Some Rain" || hayData[i]["BaleQuality"] === "Heavy Rain") {
                             hayChanges.push({"HayType": resetHayData[i]["HayType"], "BaleQuality": resetHayData[i]["BaleQuality"], "Quantity": hayData[i]["Quantity"], "Price": hayData[i]["Price"], "NewHayType": hayData[i]["HayType"], "NewBaleQuality": hayData[i]["BaleQuality"]});
                         } else {
-                            console.log("BaleQuality must be No Rain, Some Rain, or Heavy Rain")
+                            hayDataErrors.push({"Row": i, "Error": "BaleQuality must be No Rain, Some Rain, or Heavy Rain"})
                         }
                     }
                 } else {
@@ -158,10 +161,10 @@ const AdminApp = () => {
                         if (hayData[i]["BaleQuality"] === "No Rain" || hayData[i]["BaleQuality"] === "Some Rain" || hayData[i]["BaleQuality"] === "Heavy Rain") {
                             hayChanges.push(hayData[i])
                         } else {
-                            console.log("BaleQuality must be No Rain, Some Rain, or Heavy Rain")
+                            hayDataErrors.push({"Row": i, "Error": "BaleQuality must be No Rain, Some Rain, or Heavy Rain"})
                         }
                     } else {
-                        console.log("HayType cannot be left blank.")
+                        hayDataErrors.push({"Row": i, "Error": "HayType cannot be left blank."})
                     }
                 }
             }
@@ -182,21 +185,27 @@ const AdminApp = () => {
             if (hayChanges !== []) {
                 hayChanges.forEach(hayFetchPut);
             }
+
+            if (hayDataErrors.length > 0) {
+                console.log(hayDataErrors);
+                setHayErrors(hayDataErrors);
+            }
         }
 
         const honeyLoop = () => {
             let honeyChanges = [];
+            let honeyDataErrors = [];
             
             let i;
             for (i = 0; i < honeyData.length; i++) {
                 if (honeyData[i]["HoneyType"] === "") {
-                    console.log("HoneyType cannot be left blank.")
+                    honeyDataErrors.push({"Row": i, "Error": "HoneyType cannot be left blank."})
                 } else if (isNaN(honeyData[i]["HoneySize"]) || honeyData[i]["HoneySize"] <= 0) {
-                    console.log("HoneySize must be a number greater than 0.")
+                    honeyDataErrors.push({"Row": i, "Error": "HoneySize must be a number greater than 0."})
                 } else if (isNaN(honeyData[i]["Quantity"]) || honeyData[i]["Quantity"] < 0) {
-                    console.log("Quantity must be a number greater than or equal to 0.")
+                    honeyDataErrors.push({"Row": i, "Error": "Quantity must be a number greater than or equal to 0."})
                 } else if (isNaN(honeyData[i]["Price"]) || honeyData[i]["Price"] < 0) {
-                    console.log("Price must be a number greater than or equal to 0.")
+                    honeyDataErrors.push({"Row": i, "Error": "Price must be a number greater than or equal to 0."})
                 } else if (resetHoneyData[i]) {
                     if (honeyData[i]["HoneyType"] !== resetHoneyData[i]["HoneyType"] || honeyData[i]["HoneySize"] !== resetHoneyData[i]["HoneySize"] || honeyData[i]["Quantity"] !== resetHoneyData[i]["Quantity"] || honeyData[i]["Price"] !== resetHoneyData[i]["Price"]) {
                         honeyChanges.push({"HoneyType": resetHoneyData[i]["HoneyType"], "HoneySize": resetHoneyData[i]["HoneySize"], "Quantity": honeyData[i]["Quantity"], "Price": honeyData[i]["Price"], "NewHoneyType": honeyData[i]["HoneyType"], "NewHoneySize": honeyData[i]["HoneySize"]});
@@ -218,7 +227,13 @@ const AdminApp = () => {
                 console.log(response.json())
             }
 
-            honeyChanges.forEach(honeyFetchPut);
+            if (honeyChanges !== []) {
+                honeyChanges.forEach(honeyFetchPut);
+            }
+
+            if (honeyDataErrors !== []) {
+                setHoneyErrors(honeyDataErrors);
+            }
         }
 
         fetchHay();
@@ -275,7 +290,7 @@ const AdminApp = () => {
         if (message.msg === "Token has expired") {
             return appContext.setLoggedIn(false);
         } else {
-            console.log(message);
+            console.log(message.msg);
         }
         resetHoney();
     };
@@ -340,6 +355,18 @@ const AdminApp = () => {
         prevHoneyRef.current = newHoneyData;
     };
 
+    const hayErrorDisplay = hayErrors.map((hayErr, i) => {
+        return (
+            <div className="admin-hay-error" key={`Error${i}InRow${hayErr.Row}`}>Row: {hayErr.Row + 1} Error: {hayErr.Error}</div>
+        )
+    });
+
+    const honeyErrorDisplay = honeyErrors.map((honeyErr, i) => {
+        return (
+            <div className="admin-honey-error" key={`Error${i}InRow${honeyErr.Row}`}>Row: {honeyErr.Row + 1} Error: {honeyErr.Error}</div>
+        )
+    });
+
 
     return (
         <div className="admin-app">
@@ -372,6 +399,9 @@ const AdminApp = () => {
             <div>
                 { deleteMode ? null : <button onClick={addHayRow}>Add Hay Row</button> }
             </div>
+            <div>
+                { (!deleteMode && (hayErrors !== [])) ? hayErrorDisplay : null }
+            </div>
             <h2 className="admin-honey-header">Honey Table</h2>
             { loaded
                 ?   <Table>
@@ -391,6 +421,9 @@ const AdminApp = () => {
             }
             <div>
                 { deleteMode ? null : <button onClick={addHoneyRow}>Add Honey Row</button> }
+            </div>
+            <div>
+                { (!deleteMode && (honeyErrors !== [])) ? honeyErrorDisplay : null }
             </div>
             <div className="admin-buttons-container">
                 { deleteMode ? null : <button className="save-changes-button" onClick={saveChanges}>Save Changes</button> }
