@@ -223,11 +223,6 @@ const AdminApp = () => {
 
         fetchHay();
         fetchHoney();
-        // try {
-        //     const response = await fetch(``)
-        // } catch(err){
-        //     console.log(err);
-        // }
     };
 
     const resetHay = async () => {
