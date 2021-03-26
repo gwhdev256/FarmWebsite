@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from hidden import farm_key
 # import datetime
 from db import db
 
@@ -19,7 +20,7 @@ app.config['CORS_SUPPORTS_CREDENTIALS'] = True
 
 # app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(minutes=1)
 
-app.secret_key = 'development'
+app.secret_key = farm_key
 
 api = Api(app)
 
