@@ -3,7 +3,6 @@ import '../App.css';
 import { AppContext } from './AppContext.js';
 import { useHistory } from 'react-router-dom';
 
-import { fetchFunc } from './Fetch.js';
 
 const AdminLogin = () => {
     const [username, setUsername] = useState("");
@@ -19,17 +18,25 @@ const AdminLogin = () => {
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSubmit = async() => {
-        let res = await fetchFunc(`${appContext.apiUrl}/login`, 'POST', {"username": `${username}`, "password": `${password}`})
+        const data = {"username": `${username}`, "password": `${password}`};
+        const res = await fetch(`${appContext.apiUrl}/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        const response = await res.json();
         setUsername("");
         setPassword("");
-        if (res['access_token']) {
+        if (response['access_token']) {
             appContext.setLoggedIn(true);
-            appContext.setToken(res['access_token']);
+            appContext.setToken(response['access_token']);
             appContext.setSelectedIcon("admin");
             history.push("/admin");     
-            return res;
+            return response;
         } else {
-            return setErrorMessage(`Error: ${res["message"]}`);
+            return setErrorMessage(`Error: ${response["message"]}`);
         }
     };
 
