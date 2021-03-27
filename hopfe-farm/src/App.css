@@ -87,7 +87,23 @@
   font-size: calc(10px + 5vmin);
   color: rgba(255, 255, 255, 0.623);
   height: 100%;
-  padding: 0vh 0vh 30vh 0vh;
+  padding: 0vh 0vh 10vh 0vh;
+}
+
+.honey-pic-1 {
+  max-width: 15%;
+}
+
+.honey-pic-1-description {
+  color: whitesmoke;
+  font-size: calc(10px + 2vmin);
+  margin-left: 5%;
+}
+
+.home-honey-info {
+  display: flex;
+  justify-content: left;
+  margin-left: 5%;
 }
 
 .hay-app {
