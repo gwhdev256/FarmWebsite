@@ -87,23 +87,67 @@
   font-size: calc(10px + 5vmin);
   color: rgba(255, 255, 255, 0.623);
   height: 100%;
-  padding: 0vh 0vh 10vh 0vh;
+  padding: 0vh 0vh 5vh 0vh;
 }
 
-.honey-pic-1 {
-  max-width: 15%;
-}
-
-.honey-pic-1-description {
-  color: whitesmoke;
-  font-size: calc(10px + 2vmin);
+.home-hay-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   margin-left: 5%;
+}
+
+.hay-pic-1 {
+  max-width: 15%;
+  min-width: 150px;
+}
+
+.hay-pic-1-description {
+  color: whitesmoke;
+  font-size: calc(10px + 3vmin);
+  margin-left: 5%;
+  margin-right:5%;
+  margin-bottom: 5%;
+}
+
+.home-trailer-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 5%;
+}
+
+.trailer-pic-2 {
+  max-width: 20%;
+  min-width: 150px;
+}
+
+.trailer-pic-2-description {
+  color: whitesmoke;
+  font-size: calc(10px + 3vmin);
+  margin-left: auto;
+  margin-right: 5%;
+  margin-bottom: 5%;
 }
 
 .home-honey-info {
   display: flex;
-  justify-content: left;
+  justify-content: flex-start;
+  align-items: center;
   margin-left: 5%;
+}
+
+.honey-pic-1 {
+  max-width: 15%;
+  min-width: 150px;
+}
+
+.honey-pic-1-description {
+  color: whitesmoke;
+  font-size: calc(10px + 3vmin);
+  margin-left: 5%;
+  margin-right: auto;
+  margin-bottom: 5%;
 }
 
 .hay-app {
