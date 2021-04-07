@@ -15,11 +15,6 @@ def client():
     json = rv.get_json()
     setup_token = json["access_token"]
     client.delete('/user', headers={"Authorization" : f"Bearer {setup_token}"})
-    client.post('/register', json={"username": "TestUser1", "password": "TestPass"})
-    rv = client.post('/login', json={"username": "TestUser1", "password": "TestPass"})
-    json = rv.get_json()
-    setup_token2 = json["access_token"]
-    client.delete('/user', headers={"Authorization" : f"Bearer {setup_token2}"})
     yield client
 
 def test_post(client):
@@ -38,22 +33,81 @@ def test_post(client):
                                     "BaleQuality": "Some Rain",
                                     "Quantity": 100,
                                     "Price": 200.00
+                                    }
+    )
+    assert(rv.status_code == 401)
+
+    rv = client.post('/createhay', json={
+                                    "HayType": "test type", 
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00
                                     },
                     headers={"Authorization" : f"Bearer {token}"}
     )
     json = rv.get_json()
     assert(json["message"] == "Data added successfully.")
+    assert("added_entry" in json)
+
+    entry_id = json["added_entry"]["id"]
+
+    client.delete(f'/hay/{entry_id}', headers={"Authorization" : f"Bearer {token}"})
                     
 def test_put(client):
     #http://localhost:5000/createhay
-    client.post('/register', json={"username": "TestUser1", "password": "TestPass"})
+    client.post('/register', json={"username": "TestUser", "password": "TestPass"})
 
-    rv = client.post('/login', json={"username": "TestUser1", "password": "TestPass"})
+    rv = client.post('/login', json={"username": "TestUser", "password": "TestPass"})
     json = rv.get_json()
     assert("access_token" in json)
     assert(rv.status_code == 200)
 
     token = json["access_token"]
+
+    rv = client.post('/createhay', json={
+                                    "HayType": "test type", 
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00
+                                    },
+                    headers={"Authorization" : f"Bearer {token}"}
+    )
+
+    rv = client.post('/createhay', json={
+                                    "HayType": "test type 2", 
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00
+                                    },
+                    headers={"Authorization" : f"Bearer {token}"}
+    )
+    json = rv.get_json()
+    hay_id_1 = json["added_entry"]["id"]
+
+    rv = client.put('/createhay', json={
+                                    "HayType": "test type",
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00,
+                                    "NewHayType": "new test type",
+                                    "NewBaleQuality": "No Rain"
+                                    }
+    )
+    assert(rv.status_code == 401)
+
+    rv = client.put('/createhay', json={
+                                    "HayType": "test type",
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00,
+                                    "NewHayType": "test type 2",
+                                    "NewBaleQuality": "Some Rain"
+                                    },
+                    headers={"Authorization" : f"Bearer {token}"}
+    )
+    json = rv.get_json()
+    assert(rv.status_code == 404)
+    assert(json["message"] == "An entry with a hay type of 'test type 2' and bale quality of 'Some Rain' already exists.")
 
     rv = client.put('/createhay', json={
                                     "HayType": "test type",
@@ -67,3 +121,122 @@ def test_put(client):
     )
     json = rv.get_json()
     assert(json["message"] == "Hay entry updated successfully.")
+    entry_id = json["changed_entry"]["id"]
+
+    rv = client.put('/createhay', json={
+                                    "HayType": "newest test type",
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00
+                                    },
+                    headers={"Authorization" : f"Bearer {token}"}
+    )
+    json = rv.get_json()
+    assert(rv.status_code == 201)
+    assert(json["message"] == "Hay data created successfully.")
+    hay_id_2 = json["added_entry"]["id"]
+
+    client.delete(f'/hay/{entry_id}', headers={"Authorization" : f"Bearer {token}"})
+    client.delete(f'/hay/{hay_id_1}', headers={"Authorization" : f"Bearer {token}"})
+    client.delete(f'/hay/{hay_id_2}', headers={"Authorization" : f"Bearer {token}"})
+
+
+    rv = client.put('/createhay')
+
+def test_get_hay_data(client):
+    #http://localhost:5000/hay/<_id>
+    client.post('/register', json={"username": "TestUser", "password": "TestPass"})
+
+    rv = client.post('/login', json={"username": "TestUser", "password": "TestPass"})
+    json = rv.get_json()
+    assert("access_token" in json)
+    assert(rv.status_code == 200)
+
+    token = json["access_token"]
+
+    rv = client.post('/createhay', json={
+                                    "HayType": "test type", 
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00
+                                    },
+                    headers={"Authorization" : f"Bearer {token}"}
+    )
+    json = rv.get_json()
+    entry_id = json["added_entry"]["id"]
+
+    rv = client.get(f'/hay/{entry_id}')
+    json = rv.get_json()
+    assert(rv.status_code == 200)
+    assert(json["HayType"] == "test type")
+    assert(json["BaleQuality"] == "Some Rain")
+
+    rv = client.delete(f'/hay/{entry_id}', headers={"Authorization" : f"Bearer {token}"})
+
+    rv = client.get(f'/hay/{entry_id}')
+    json = rv.get_json()
+    assert(rv.status_code == 404)
+    assert(json["message"] == "Hay entry not found")
+
+def test_delete(client):
+    #http://localhost:5000/hay/<_id>
+    client.post('/register', json={"username": "TestUser", "password": "TestPass"})
+
+    rv = client.post('/login', json={"username": "TestUser", "password": "TestPass"})
+    json = rv.get_json()
+    assert("access_token" in json)
+    assert(rv.status_code == 200)
+
+    token = json["access_token"]
+
+    rv = client.post('/createhay', json={
+                                    "HayType": "test type", 
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00
+                                    },
+                    headers={"Authorization" : f"Bearer {token}"}
+    )
+    json = rv.get_json()
+    entry_id = json["added_entry"]["id"]
+    
+    rv = client.delete(f'/hay/{entry_id}')
+    assert(rv.status_code == 401)
+
+    rv = client.delete(f'/hay/{entry_id}', headers={"Authorization" : f"Bearer {token}"})
+    json = rv.get_json()
+    assert(json["message"] == "Hay entry successfully deleted.")
+    assert(rv.status_code == 200)
+
+    rv = client.delete(f'/hay/{entry_id}', headers={"Authorization" : f"Bearer {token}"})
+    json = rv.get_json()
+    assert(json["message"] == "Hay entry not found")
+    assert(rv.status_code == 404)
+
+def test_get_hay_list(client):
+    #http://localhost/haylist
+    client.post('/register', json={"username": "TestUser", "password": "TestPass"})
+
+    rv = client.post('/login', json={"username": "TestUser", "password": "TestPass"})
+    json = rv.get_json()
+
+    token = json["access_token"]
+
+    rv = client.post('/createhay', json={
+                                    "HayType": "test type", 
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00
+                                    },
+                    headers={"Authorization" : f"Bearer {token}"}
+    )
+    json = rv.get_json()
+    assert(json["message"] == "Data added successfully.")
+    assert("added_entry" in json)
+
+    entry_id = json["added_entry"]["id"]
+
+    rv = client.get('/haylist')
+    assert(rv.status_code == 200)
+
+    client.delete(f'/hay/{entry_id}', headers={"Authorization" : f"Bearer {token}"})
