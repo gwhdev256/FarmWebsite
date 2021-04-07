@@ -40,13 +40,15 @@ class CreateHayData(Resource):
         if HayDataModel.find_by_hay_type_and_bale_quality(data['HayType'], data['BaleQuality']):
             return {'message': 'Data for that hay type and quality already exists.'}, 404
 
-        new_data = HayDataModel(data['HayType'], data['BaleQuality'], data['Quantity'], data['Price'])
+        hay_data = HayDataModel(data['HayType'], data['BaleQuality'], data['Quantity'], data['Price'])
         try:
-            new_data.save_to_db()
+            hay_data.save_to_db()
         except:
             return {"message": "An error occurred while inserting the hay entry."}, 500
 
-        return {'message': 'Data added successfully.'}, 201
+        return {'message': 'Data added successfully.',
+                'added_entry': hay_data.json()
+        }, 201
     
     @jwt_required
     def put(self):
@@ -56,15 +58,20 @@ class CreateHayData(Resource):
 
         if hay_data:
             if data['NewHayType'] and data['NewBaleQuality']:
-                try:
-                    hay_data.HayType = data['NewHayType']
-                    hay_data.BaleQuality = data['NewBaleQuality']
-                    hay_data.Quantity = data['Quantity']
-                    hay_data.Price = data['Price']
-                    hay_data.save_to_db()
-                    return {'message': 'Hay entry updated successfully.'}, 200
-                except:
-                    return {'message': 'An error occured while inserting the hay entry.'}, 500
+                if HayDataModel.find_by_hay_type_and_bale_quality(data['NewHayType'], data['NewBaleQuality']):
+                    return {'message': "An entry with a hay type of '{}' and bale quality of '{}' already exists.".format(data['NewHayType'], data['NewBaleQuality'])}, 404
+                else:
+                    try:
+                        hay_data.HayType = data['NewHayType']
+                        hay_data.BaleQuality = data['NewBaleQuality']
+                        hay_data.Quantity = data['Quantity']
+                        hay_data.Price = data['Price']
+                        hay_data.save_to_db()
+                        return {'message': 'Hay entry updated successfully.',
+                                'changed_entry': hay_data.json()
+                        }, 200
+                    except:
+                        return {'message': 'An error occured while inserting the hay entry.'}, 500
             else:
                 return {'message': 'Please provide NewHayType and NewBaleQuality in body.'}, 400
         else:
@@ -73,7 +80,9 @@ class CreateHayData(Resource):
             else:
                 new_hay_data = HayDataModel(data['HayType'], data['BaleQuality'], data['Quantity'], data['Price'])
                 new_hay_data.save_to_db()
-                return{'message': 'Hay data created successfully.'}, 201
+                return {'message': 'Hay data created successfully.',
+                        'added_entry': new_hay_data.json()
+                }, 201
 
 
 class HayData(Resource):
@@ -81,7 +90,7 @@ class HayData(Resource):
         hay = HayDataModel.find_by_id(_id)
         if hay:
             return hay.json()
-        return {'message': 'id not found'}, 404
+        return {'message': 'Hay entry not found'}, 404
 
     @jwt_required
     def delete(self, _id):
@@ -89,10 +98,12 @@ class HayData(Resource):
         if hay:
             hay.delete_from_db()
             return {'message': 'Hay entry successfully deleted.'}, 200
-        return {'message': 'id not found'}, 404
+        return {'message': 'Hay entry not found'}, 404
 
 
 class HayList(Resource):
     def get(self):
         hay_categories = [hay.json() for hay in HayDataModel.find_all()]
-        return {'hay': hay_categories}, 200
+        if hay_categories:
+            return {'hay': hay_categories}, 200
+        return {'message': 'No hay entries found'}, 404
