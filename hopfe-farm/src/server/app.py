@@ -9,7 +9,7 @@ from db import db
 from resources.users import UserRegister, User, UserLogin
 from resources.contact_data import ContactData, CreateContactData, ContactList
 from resources.honey_data import CreateHoneyData, HoneyData, HoneyList
-from resources.hay_data import CreateHayData, HayData, HayList
+from resources.hay_data import CreateHayData, HayData, HayList, TestHayFuncs
 
 app = Flask(__name__)
 
@@ -44,6 +44,7 @@ api.add_resource(HoneyList, '/honeylist')
 api.add_resource(CreateHayData, '/createhay')
 api.add_resource(HayData, '/hay/<int:_id>')
 api.add_resource(HayList, '/haylist')
+api.add_resource(TestHayFuncs, '/haytest')
 
 if __name__ == '__main__':
     print("--- Starting", __file__)
