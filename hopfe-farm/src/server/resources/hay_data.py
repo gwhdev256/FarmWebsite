@@ -75,8 +75,8 @@ class CreateHayData(Resource):
             else:
                 return {'message': 'Please provide NewHayType and NewBaleQuality in body.'}, 400
         else:
-            if HayDataModel.find_by_hay_type_and_bale_quality(data['NewHayType'], data['NewBaleQuality']):
-                return {'message': "An entry with a hay type of '{}'and bale quality of '{}' already exists.".format(data['NewHayType'], data['NewBaleQuality'])}, 404
+            if data['NewHayType'] or data['NewBaleQuality']:
+                return {'message': "An entry with a hay type of '{}' and bale quality of '{}' doesn't exist and cannot be updated.".format(data['HayType'], data['BaleQuality'])}, 404
             else:
                 new_hay_data = HayDataModel(data['HayType'], data['BaleQuality'], data['Quantity'], data['Price'])
                 new_hay_data.save_to_db()
@@ -107,3 +107,27 @@ class HayList(Resource):
         if hay_categories:
             return {'hay': hay_categories}, 200
         return {'message': 'No hay entries found'}, 404
+
+class TestHayFuncs(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('HayType',
+        type=str,
+        required=True,
+        help="Body must contain HayType (ex. 30% Alfalfa)."
+    )
+    parser.add_argument('BaleQuality',
+        type=str,
+        required=True,
+        help="Body must contain a BaleQuality (No Rain / Some Rain / Heavy Rain)."
+    )
+
+    @jwt_required
+    def delete(self):
+        data = TestHayFuncs.parser.parse_args()
+        
+        hay_data = HayDataModel.find_by_hay_type_and_bale_quality(data['HayType'], data['BaleQuality'])
+
+        if hay_data:
+            hay_data.delete_from_db()
+            return {'message': 'Hay entry successfully deleted.'}, 200
+        return {'message': 'Hay entry not found.'}, 404
