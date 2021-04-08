@@ -14,6 +14,10 @@ def client():
     rv = client.post('/login', json={"username": "TestUser", "password": "TestPass"})
     json = rv.get_json()
     setup_token = json["access_token"]
+    client.delete('/haytest', json={"HayType": "test type", "BaleQuality": "Some Rain"}, headers={"Authorization" : f"Bearer {setup_token}"})
+    client.delete('/haytest', json={"HayType": "test type 2", "BaleQuality": "Some Rain"}, headers={"Authorization" : f"Bearer {setup_token}"})
+    client.delete('/haytest', json={"HayType": "new test type", "BaleQuality": "No Rain"}, headers={"Authorization" : f"Bearer {setup_token}"})
+    client.delete('/haytest', json={"HayType": "newest test type", "BaleQuality": "Some Rain"}, headers={"Authorization" : f"Bearer {setup_token}"})
     client.delete('/user', headers={"Authorization" : f"Bearer {setup_token}"})
     yield client
 
@@ -49,9 +53,17 @@ def test_post(client):
     assert(json["message"] == "Data added successfully.")
     assert("added_entry" in json)
 
-    entry_id = json["added_entry"]["id"]
-
-    client.delete(f'/hay/{entry_id}', headers={"Authorization" : f"Bearer {token}"})
+    rv = client.post('/createhay', json={
+                                    "HayType": "test type", 
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00
+                                    },
+                    headers={"Authorization" : f"Bearer {token}"}
+    )
+    json = rv.get_json()
+    assert(json["message"] == "Data for that hay type and quality already exists.")
+    assert(rv.status_code == 404)
                     
 def test_put(client):
     #http://localhost:5000/createhay
@@ -124,6 +136,32 @@ def test_put(client):
     entry_id = json["changed_entry"]["id"]
 
     rv = client.put('/createhay', json={
+                                    "HayType": "test type 2",
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00
+                                    },
+                    headers={"Authorization" : f"Bearer {token}"}
+    )
+    json = rv.get_json()
+    assert(json["message"] == "Please provide NewHayType and NewBaleQuality in body.")
+    assert(rv.status_code == 400)
+
+    rv = client.put('/createhay', json={
+                                    "HayType": "some other test type",
+                                    "BaleQuality": "Some Rain",
+                                    "Quantity": 100,
+                                    "Price": 200.00,
+                                    "NewHayType": "new test type",
+                                    "NewBaleQuality": "No Rain"
+                                    },
+                    headers={"Authorization" : f"Bearer {token}"}
+    )
+    json = rv.get_json()
+    assert(json["message"] == "An entry with a hay type of 'some other test type' and bale quality of 'Some Rain' doesn't exist and cannot be updated.")
+    assert(rv.status_code == 404)
+
+    rv = client.put('/createhay', json={
                                     "HayType": "newest test type",
                                     "BaleQuality": "Some Rain",
                                     "Quantity": 100,
@@ -135,13 +173,6 @@ def test_put(client):
     assert(rv.status_code == 201)
     assert(json["message"] == "Hay data created successfully.")
     hay_id_2 = json["added_entry"]["id"]
-
-    client.delete(f'/hay/{entry_id}', headers={"Authorization" : f"Bearer {token}"})
-    client.delete(f'/hay/{hay_id_1}', headers={"Authorization" : f"Bearer {token}"})
-    client.delete(f'/hay/{hay_id_2}', headers={"Authorization" : f"Bearer {token}"})
-
-
-    rv = client.put('/createhay')
 
 def test_get_hay_data(client):
     #http://localhost:5000/hay/<_id>
@@ -239,4 +270,4 @@ def test_get_hay_list(client):
     rv = client.get('/haylist')
     assert(rv.status_code == 200)
 
-    client.delete(f'/hay/{entry_id}', headers={"Authorization" : f"Bearer {token}"})
+    # client.delete(f'/hay/{entry_id}', headers={"Authorization" : f"Bearer {token}"})
