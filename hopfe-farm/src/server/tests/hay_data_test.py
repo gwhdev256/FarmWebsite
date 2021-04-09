@@ -20,6 +20,15 @@ def client():
     client.delete('/haytest', json={"HayType": "newest test type", "BaleQuality": "Some Rain"}, headers={"Authorization" : f"Bearer {setup_token}"})
     client.delete('/user', headers={"Authorization" : f"Bearer {setup_token}"})
     yield client
+    client.post('/register', json={"username": "TestUser", "password": "TestPass"})
+    rv = client.post('/login', json={"username": "TestUser", "password": "TestPass"})
+    json = rv.get_json()
+    setup_token = json["access_token"]
+    client.delete('/haytest', json={"HayType": "test type", "BaleQuality": "Some Rain"}, headers={"Authorization" : f"Bearer {setup_token}"})
+    client.delete('/haytest', json={"HayType": "test type 2", "BaleQuality": "Some Rain"}, headers={"Authorization" : f"Bearer {setup_token}"})
+    client.delete('/haytest', json={"HayType": "new test type", "BaleQuality": "No Rain"}, headers={"Authorization" : f"Bearer {setup_token}"})
+    client.delete('/haytest', json={"HayType": "newest test type", "BaleQuality": "Some Rain"}, headers={"Authorization" : f"Bearer {setup_token}"})
+    client.delete('/user', headers={"Authorization" : f"Bearer {setup_token}"})
 
 def test_post(client):
     #http://localhost:5000/createhay
