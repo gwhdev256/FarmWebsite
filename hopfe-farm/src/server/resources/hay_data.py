@@ -71,7 +71,7 @@ class CreateHayData(Resource):
                                 'changed_entry': hay_data.json()
                         }, 200
                     except:
-                        return {'message': 'An error occured while inserting the hay entry.'}, 500
+                        return {'message': 'An error occurred while inserting the hay entry.'}, 500
             else:
                 return {'message': 'Please provide NewHayType and NewBaleQuality in body.'}, 400
         else:
