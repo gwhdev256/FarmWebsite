@@ -56,21 +56,31 @@ class CreateHoneyData(Resource):
 
         if honey_data:
             if data['NewHoneyType'] and data['NewHoneySize']:
-                honey_data.HoneyType = data['NewHoneyType']
-                honey_data.HoneySize = data['NewHoneySize']
-                honey_data.Quantity = data['Quantity']
-                honey_data.Price = data['Price']
-                honey_data.save_to_db()
-                return {'message': 'Honey entry updated successfully.'}, 200
+                if HoneyDataModel.find_by_honey_type_and_honey_size(data['NewHoneyType'], data['NewHoneySize']):
+                    return {'message': "An entry with a honey type of '{}' and honey size of '{}' already exists.".format(data['NewHoneyType'], data['NewHoneySize'])}, 404
+                else:
+                    try:
+                        honey_data.HoneyType = data['NewHoneyType']
+                        honey_data.HoneySize = data['NewHoneySize']
+                        honey_data.Quantity = data['Quantity']
+                        honey_data.Price = data['Price']
+                        honey_data.save_to_db()
+                        return {'message': 'Honey entry updated successfully.',
+                                'changed_entry': honey_data.json()
+                        }, 200
+                    except:
+                        return {'message': 'An error occurred while inserting the honey entry.'}, 500
             else:
                 return {'message': 'Please provide NewHoneyType and NewHoneySize in body.'}, 400
         else:
-            if HoneyDataModel.find_by_honey_type_and_honey_size(data['NewHoneyType'], data['NewHoneySize']):
-                return {'message': "An entry with a honey type of '{}' and honey size of '{}' already exists.".format(data['NewHoneyType'], data['NewHoneySize'])}, 404
+            if data['NewHoneyType'] or data['NewHoneySize']:
+                return {'message': "An entry with a honey type of '{}' and honey size of '{}' doesn't exist and cannot be updated.".format(data['HoneyType'], data['HoneySize'])}, 404
             else:
                 honey_data = HoneyDataModel(data['HoneyType'], data['HoneySize'], data['Quantity'], data['Price'])
                 honey_data.save_to_db()
-                return {'message': 'Honey data created successfully.'}, 201
+                return {'message': 'Honey data created successfully.',
+                        'changed_entry': honey_data.json()
+                }, 201
 
 
 class HoneyData(Resource):
@@ -93,3 +103,27 @@ class HoneyList(Resource):
     def get(self):
         honey_categories = [honey.json() for honey in HoneyDataModel.find_all()]
         return {'honey': honey_categories}, 200
+
+class TestHoneyFuncs(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('HoneyType',
+        type=str,
+        required=True,
+        help="Body must contain HayType (ex. 30% Alfalfa)."
+    )
+    parser.add_argument('HoneySize',
+        type=str,
+        required=True,
+        help="Body must contain a BaleQuality (No Rain / Some Rain / Heavy Rain)."
+    )
+
+    @jwt_required
+    def delete(self):
+        data = TestHoneyFuncs.parser.parse_args()
+        
+        honey_data = HoneyDataModel.find_by_honey_type_and_honey_size(data['HoneyType'], data['HoneySize'])
+
+        if honey_data:
+            honey_data.delete_from_db()
+            return {'message': 'Honey entry successfully deleted.'}, 200
+        return {'message': 'Honey entry not found.'}, 404
