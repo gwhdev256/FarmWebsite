@@ -8,7 +8,7 @@ from db import db
 
 from resources.users import UserRegister, User, UserLogin
 from resources.contact_data import ContactList
-from resources.honey_data import CreateHoneyData, HoneyData, HoneyList
+from resources.honey_data import CreateHoneyData, HoneyData, HoneyList, TestHoneyFuncs
 from resources.hay_data import CreateHayData, HayData, HayList, TestHayFuncs
 
 app = Flask(__name__)
@@ -32,8 +32,6 @@ jwt = JWTManager(app)
 
 CORS(app)
 
-api.add_resource(UserRegister, '/register')
-api.add_resource(User, '/user')
 api.add_resource(UserLogin, '/login')
 api.add_resource(ContactList, '/contactlist')
 api.add_resource(CreateHoneyData, '/createhoney')
@@ -42,6 +40,10 @@ api.add_resource(HoneyList, '/honeylist')
 api.add_resource(CreateHayData, '/createhay')
 api.add_resource(HayData, '/hay/<int:_id>')
 api.add_resource(HayList, '/haylist')
+
+api.add_resource(UserRegister, '/register')
+api.add_resource(User, '/user')
+api.add_resource(TestHoneyFuncs, '/honeytest')
 api.add_resource(TestHayFuncs, '/haytest')
 
 if __name__ == '__main__':
