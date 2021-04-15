@@ -206,6 +206,10 @@
   font-size: calc(10px + 1.5vmin);
 }
 
+.admin-button {
+  padding: 5px 10px;
+}
+
 .admin-hay-header,
 .admin-honey-header {
   font-size: calc(5px + 3vmin);
@@ -219,8 +223,9 @@
   color: rgba(245, 245, 245, 0.849);
 }
 
-.admin-button-container {
+.admin-save-cancel-container {
   display: flex;
+  justify-content: center;
 }
 
 .admin-hay-error,
