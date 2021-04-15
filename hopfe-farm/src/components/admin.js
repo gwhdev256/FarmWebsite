@@ -313,7 +313,7 @@ const AdminApp = () => {
                 <Td key={`${i}1`}>{tr.BaleQuality}</Td>
                 <Td key={`${i}2`}>{tr.Quantity}</Td>
                 <Td key={`${i}3`}>{tr.Price}</Td>
-                <Td key={`${i}4`}><button name={i} onClick={(event) => deleteHayRow(event)}>Delete</button></Td>
+                <Td key={`${i}4`}><button className="delete-hay-row-button admin-button" name={i} onClick={(event) => deleteHayRow(event)}>Delete</button></Td>
             </Tr>
         )
     });
@@ -336,7 +336,7 @@ const AdminApp = () => {
                 <Td className="honey-td" key={`${i}1`}>{tr.HoneySize}</Td>
                 <Td className="honey-td" key={`${i}2`}>{tr.Quantity}</Td>
                 <Td className="honey-td" key={`${i}3`}>{tr.Price}</Td>
-                <Td className="honey-td" key={`${i}4`}><button name={i} onClick={(event) => deleteHoneyRow(event)}>Delete</button></Td>
+                <Td className="honey-td" key={`${i}4`}><button className="delete-honey-row-button admin-button" name={i} onClick={(event) => deleteHoneyRow(event)}>Delete</button></Td>
             </Tr>
         )
     });
@@ -370,10 +370,10 @@ const AdminApp = () => {
 
     return (
         <div className="admin-app">
-            <div className="delete-mode-toggle-button">
+            <div className="delete-mode-toggle-container">
                 { deleteMode 
-                    ? <button onClick={deleteModeToggle}>Enter Edit Mode</button> 
-                    : <button onClick={deleteModeToggle}>Enter Delete Mode</button>
+                    ? <button className="delete-mode-edit-button admin-button" onClick={deleteModeToggle}>Enter Edit Mode</button> 
+                    : <button className="delete-mode-delete-button admin-button" onClick={deleteModeToggle}>Enter Delete Mode</button>
                 }
             </div>
             <div className="delete-mode-warning">
@@ -397,7 +397,7 @@ const AdminApp = () => {
                 :   <div className="spinner"><Ellipsis color="whitesmoke"/></div>
             }
             <div>
-                { deleteMode ? null : <button onClick={addHayRow}>Add Hay Row</button> }
+                { deleteMode ? null : <button className="add-hay-row-button admin-button" onClick={addHayRow}>Add Hay Row</button> }
             </div>
             <div>
                 { (!deleteMode && (hayErrors !== [])) ? hayErrorDisplay : null }
@@ -420,14 +420,14 @@ const AdminApp = () => {
                 : <div className="spinner"><Ellipsis color="whitesmoke"/></div>
             }
             <div>
-                { deleteMode ? null : <button onClick={addHoneyRow}>Add Honey Row</button> }
+                { deleteMode ? null : <button className="add-honey-row-button admin-button" onClick={addHoneyRow}>Add Honey Row</button> }
             </div>
             <div>
                 { (!deleteMode && (honeyErrors !== [])) ? honeyErrorDisplay : null }
             </div>
-            <div className="admin-buttons-container">
-                { deleteMode ? null : <button className="save-changes-button" onClick={saveChanges}>Save Changes</button> }
-                { deleteMode ? null : <button className="cancel-changes-button" onClick={cancelChanges}>Cancel Changes</button> }
+            <div className="admin-save-cancel-container">
+                { deleteMode ? null : <button className="save-changes-button admin-button" onClick={saveChanges}>Save Changes</button> }
+                { deleteMode ? null : <button className="cancel-changes-button admin-button" onClick={cancelChanges}>Cancel Changes</button> }
             </div>
         </div>
     )
