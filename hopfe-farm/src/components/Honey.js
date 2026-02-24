@@ -26,7 +26,7 @@ const Honey = () => {
 
     useEffect(() => {
         const initialLoad = async () => {
-            await appContext.setSelectedIcon("honey");
+            appContext.setSelectedIcon("honey");
             await appContext.honeyTrLoader();
             setLoaded(true);
         }
