@@ -24,8 +24,9 @@ app.secret_key = farm_key
 
 api = Api(app)
 
-@app.before_first_request
-def create_tables():
+db.init_app(app)
+
+with app.app_context():
     db.create_all()
 
 jwt = JWTManager(app)
